@@ -9,7 +9,7 @@ abstract type AbstractModel end
 """
 Abstract model type that is the supertype of all geophysical models in the package.
 """
-abstract type AbstractGeophyModel <: AbstractModel end
+abstract type AbstractGeophyModel{T1, T2} <: AbstractModel end
 
 """
 Abstract model type that is the supertype of all rock models in the package.
@@ -45,7 +45,7 @@ abstract type AbstractModelDistribution end
 """
 Abstract model type that is the supertype of all geophysical `model` distributions in the package.
 """
-abstract type AbstractGeophyModelDistribution <: AbstractModelDistribution end
+abstract type AbstractGeophyModelDistribution{T1, T2} <: AbstractModelDistribution end
 
 """
 Abstract model type that is the supertype of all rock physics `model` distributions in the package.

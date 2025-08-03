@@ -79,8 +79,8 @@ function get_kde_image!(ax,
         return_kde_mat=false,
         trans_utils=(m=lin_tf, h=lin_tf),
         grid=(m=collect(-1:0.1:5), z=cumsum(mDist.h)),
-        kwargs...) where {
-        C <: Chains, mdist <: MTModelDistribution{<:Distribution, <:AbstractArray}}
+        kwargs...) where {C <: Chains,
+        mdist <: AbstractGeophyModelDistribution{<:Distribution, <:AbstractVector}}
     preds = []
     for k in chain.name_map.parameters
         push!(preds, chain[k].data[:])
@@ -121,8 +121,8 @@ function get_kde_image!(ax,
         return_kde_mat=false,
         trans_utils=(;),
         grid=(m=collect(-1:0.1:5), z=cumsum(mean(mDist.h))),
-        kwargs...) where {
-        C <: Chains, mdist <: MTModelDistribution{<:Distribution, <:Distribution}}
+        kwargs...) where {C <: Chains,
+        mdist <: AbstractGeophyModelDistribution{<:Distribution, <:Distribution}}
     preds = []
     for k in chain.name_map.parameters
         push!(preds, chain[k].data[:])
@@ -257,8 +257,8 @@ function get_mean_std_image!(ax,
         std_plus_kwargs=(;),
         std_minus_kwargs=(;),
         trans_utils=(m=lin_tf, h=lin_tf),
-        z_points=cumsum(mDist.h)) where {
-        C <: Chains, mdist <: MTModelDistribution{<:Distribution, <:AbstractArray}}
+        z_points=cumsum(mDist.h)) where {C <: Chains,
+        mdist <: AbstractGeophyModelDistribution{<:Distribution, <:AbstractVector}}
     preds = []
     for k in chain.name_map.parameters
         push!(preds, chain[k].data[:])
@@ -299,8 +299,8 @@ function get_mean_std_image!(ax,
         std_plus_kwargs=(;),
         std_minus_kwargs=(;),
         trans_utils=(;),
-        z_points=cumsum(mean(mDist.h))) where {
-        C <: Chains, mdist <: MTModelDistribution{<:Distribution, <:Distribution}}
+        z_points=cumsum(mean(mDist.h))) where {C <: Chains,
+        mdist <: AbstractGeophyModelDistribution{<:Distribution, <:Distribution}}
     preds = []
     for k in chain.name_map.parameters
         push!(preds, chain[k].data[:])

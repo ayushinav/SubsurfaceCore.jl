@@ -139,8 +139,10 @@ plots on `ax` the geophysical model parameterized by `model`
 
 Checkout relevant documentation
 """
-function plot_model!(ax, model::m_type; half_space_thickness=1.25 * sum(model.h),
-        kwargs...) where {m_type}
+function plot_model!(ax,
+        model::m_type;
+        half_space_thickness=1.25 * sum(model.h),
+        kwargs...) where {m_type <: AbstractGeophyModel{<:AbstractVector, <:AbstractVector}}
     # ax = f.content[1]
     m = model.m
     h = model.h
@@ -176,8 +178,9 @@ returns a `figure` and an `axis` with the plot of geophysical model parameterize
 
 Checkout relevant documentation
 """
-function plot_model(
-        model::m_type; half_space_thickness=1.25 * sum(model.h), kwargs...) where {m_type}
+function plot_model(model::m_type;
+        half_space_thickness=1.25 * sum(model.h),
+        kwargs...) where {m_type <: AbstractGeophyModel{<:AbstractVector, <:AbstractVector}}
     fig = Figure()
     ax = Axis(fig[1, 1])
 
