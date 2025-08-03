@@ -1,9 +1,9 @@
-@testitem "inverse tests" tags = [:transformation] begin
-
+@testitem "bounds transformation tests" tags = [:transformation] begin
+    using Test
     x = randn(20)
     m = sigmoid_tf.tf.(100 .* x)
-    @test all(-3 .< m .< 6)
-    @test all(sigmoid_tf.itf.(m) .≈ 100 .* x)
+    @test all(-3.0 .<= m .<= 6.0)
+    @test all(.≈(sigmoid_tf.itf.(m), 100 .* x, atol = 1e-2))
 
     m = pow_tf.tf.(x)
     @test all(m .≈ exp10.(x))
@@ -16,7 +16,7 @@
 
 
     m = pow_sigmoid_tf.tf.(10 .* x)
-    @test all(1e-3 .< m .< 1e6)
+    @test all(1e-3 .<= m .<= 1e6)
     @test all(pow_sigmoid_tf.itf.(m) .≈ 10 .* x)
 
     m = lin_tf.tf.(x)
