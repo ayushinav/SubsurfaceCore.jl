@@ -1,5 +1,6 @@
 module SubsurfaceCore
 using CairoMakie
+using LinearAlgebra
 using Turing
 using Distributions
 using Pigeons
@@ -37,6 +38,7 @@ export AbstractGeophyModelDistribution, AbstractGeophyResponseDistribution
 export AbstractRockphyModelDistribution, AbstractRockphyResponseDistribution
 
 export transform_utils, sigmoid_tf, pow_tf, log_tf, pow_sigmoid_tf, lin_tf, phi_scale_tf
+export do_verbose
 
 # plots
 export get_scales, get_labels
