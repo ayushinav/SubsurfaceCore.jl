@@ -1,2 +1,2 @@
-get_scales(::Type{T}) where {T <: AbstractGeophyModel} = identity, identity
-get_labels(::Type{T}) where {T <: AbstractGeophyModel} = "", "z (m)"
+get_scales(::Type{T}, val_) where {T <: AbstractGeophyModel} = identity, identity
+get_labels(::Type{T}, val_) where {T <: AbstractGeophyModel} = "", "z (m)"

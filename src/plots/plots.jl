@@ -147,7 +147,7 @@ function plot_model!(ax,
     m = model.m
     h = model.h
 
-    m_vec = 10 .^ [m[1], m...]
+    m_vec = [m[1], m...]
     h_v = cumsum(h)
     h_vec = [1.0f-2, h_v..., half_space_thickness]
 

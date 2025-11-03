@@ -82,9 +82,7 @@ function stochastic_inverse(r_obs::resp1, err_resp::resp2, vars, alg_cache::mcmc
     end
 
     response_trans_utils = (; zip(keys(to_resp_nt(r_obs)), trans_utils_arr)...)
-
-    @show keys(response_trans_utils)
-
+    
     m_type = sample_type(alg_cache.apriori)
 
     if isempty(params)

@@ -208,7 +208,8 @@ Also check relevant tutorial page!
 """
 function get_kde_image(args...; return_kde_mat=false, kwargs...)
     fig = Figure()
-    kde_img = get_kde_image!(fig, args...; kwargs...)
+    ax = Axis(fig[1, 1])
+    kde_img = get_kde_image!(ax, args...; return_kde_mat = return_kde_mat, kwargs...)
 
     if return_kde_mat
         return fig, kde_img
