@@ -266,6 +266,10 @@ function get_mean_std_image!(ax,
     end
     pred = hcat(preds...)
 
+    const_fields = [f for f in fieldnames(model_type) if !(f in [:m])]
+    const_vals = [getfield(mₖ, k) for k in const_fields]
+    const_nt = (; zip(const_fields, const_vals)...)
+
     μ_m = mean(pred; dims=1)[:]
 
     μ₊_m = [quantile(pred[:, i], 1 - (1 - confidence_interval) / 2) for i in axes(pred, 2)]
@@ -284,9 +288,12 @@ function get_mean_std_image!(ax,
 
     m_type = sample_type(mDist)
 
-    plot_model!(ax, m_type(trans_utils.m.tf.(μ_m), mDist.h); mean_kwargs...)
-    plot_model!(ax, m_type(trans_utils.m.tf.(μ₊_m), mDist.h); std_plus_kwargs...)
-    plot_model!(ax, m_type(trans_utils.m.tf.(μ₋_m), mDist.h); std_minus_kwargs...)
+    m_mean = from_nt(m_type, (; m = trans_utils.m.tf.(μ_m), const_nt...))
+    m_ub = from_nt(m_type, (; m = trans_utils.m.tf.(μ₊_m), const_nt...))
+    m_lb = from_nt(m_type, (; m = trans_utils.m.tf.(μ₋_m), const_nt...))
+    plot_model!(ax, m_mean; mean_kwargs...)
+    plot_model!(ax, m_ub(trans_utils.m.tf.(μ₊_m), mDist.h); std_plus_kwargs...)
+    plot_model!(ax, m_lb(trans_utils.m.tf.(μ₋_m), mDist.h); std_minus_kwargs...)
 
     nothing
 end

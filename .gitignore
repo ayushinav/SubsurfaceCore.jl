@@ -1,3 +1,4 @@
 wip*
 .vscode
 Manifest.toml
+*.DS_Store
