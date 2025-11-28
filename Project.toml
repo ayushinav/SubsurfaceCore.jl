@@ -15,7 +15,7 @@ Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
 UnPack = "3a884ed6-31ef-47d7-9d2a-63182c4928ed"
 
 [compat]
-CairoMakie = ">= 0.11.9"
+CairoMakie = "0.11.9 - 0.24"
 DifferentiationInterface = "0.6.54"
 Distributions = "0.25.120"
 Enzyme = "0.13.66"
