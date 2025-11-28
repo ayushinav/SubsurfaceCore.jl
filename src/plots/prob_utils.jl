@@ -209,7 +209,7 @@ Also check relevant tutorial page!
 function get_kde_image(args...; return_kde_mat=false, kwargs...)
     fig = Figure()
     ax = Axis(fig[1, 1])
-    kde_img = get_kde_image!(ax, args...; return_kde_mat = return_kde_mat, kwargs...)
+    kde_img = get_kde_image!(ax, args...; return_kde_mat=return_kde_mat, kwargs...)
 
     if return_kde_mat
         return fig, kde_img
@@ -266,8 +266,10 @@ function get_mean_std_image!(ax,
     end
     pred = hcat(preds...)
 
-    const_fields = [f for f in fieldnames(model_type) if !(f in [:m])]
-    const_vals = [getfield(mₖ, k) for k in const_fields]
+    m_type = sample_type(mDist)
+
+    const_fields = [f for f in fieldnames(m_type) if !(f in [:m])]
+    const_vals = [getproperty(mDist, k) for k in const_fields]
     const_nt = (; zip(const_fields, const_vals)...)
 
     μ_m = mean(pred; dims=1)[:]
@@ -286,11 +288,9 @@ function get_mean_std_image!(ax,
         color=:green, std_plus_kwargs...)
     std_minus_kwargs = (color=:green, std_minus_kwargs...)
 
-    m_type = sample_type(mDist)
-
-    m_mean = from_nt(m_type, (; m = trans_utils.m.tf.(μ_m), const_nt...))
-    m_ub = from_nt(m_type, (; m = trans_utils.m.tf.(μ₊_m), const_nt...))
-    m_lb = from_nt(m_type, (; m = trans_utils.m.tf.(μ₋_m), const_nt...))
+    m_mean = from_nt(m_type, (; m=trans_utils.m.tf.(μ_m), const_nt...))
+    m_ub = from_nt(m_type, (; m=trans_utils.m.tf.(μ₊_m), const_nt...))
+    m_lb = from_nt(m_type, (; m=trans_utils.m.tf.(μ₋_m), const_nt...))
     plot_model!(ax, m_mean; mean_kwargs...)
     plot_model!(ax, m_ub(trans_utils.m.tf.(μ₊_m), mDist.h); std_plus_kwargs...)
     plot_model!(ax, m_lb(trans_utils.m.tf.(μ₋_m), mDist.h); std_minus_kwargs...)

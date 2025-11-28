@@ -40,7 +40,7 @@ default_params(::Type{Nothing}) = (;)
 function forward_helper(
         m::Type{T}, m0, vars, response_trans_utils, params) where {T <: AbstractGeophyModel}
     model = from_nt(m, m0)
-    resp_nt = to_resp_nt(forward(model, vars, response_trans_utils = response_trans_utils, params = params))
+    resp_nt = to_resp_nt(forward(model, vars, response_trans_utils, params))
     return resp_nt
 end
 
