@@ -1,7 +1,7 @@
 name = "SubsurfaceCore"
 uuid = "3a78539b-9dce-42c5-be8d-f3fa4153f7a3"
-authors = ["Abhinav Pratap Singh"]
 version = "0.7.1"
+authors = ["Abhinav Pratap Singh"]
 
 [deps]
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
@@ -16,7 +16,7 @@ UnPack = "3a884ed6-31ef-47d7-9d2a-63182c4928ed"
 
 [compat]
 CairoMakie = "0.11.9 - 0.24"
-DifferentiationInterface = "0.6.54"
+DifferentiationInterface = "0.6.54, 0.7"
 Distributions = "0.25.120"
 Enzyme = "0.13.66"
 Pigeons = "0.4.9"
