@@ -1,7 +1,7 @@
 name = "SubsurfaceCore"
 uuid = "3a78539b-9dce-42c5-be8d-f3fa4153f7a3"
 authors = ["Abhinav Pratap Singh"]
-version = "0.7.1"
+version = "0.7.2"
 
 [deps]
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
@@ -15,15 +15,15 @@ Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
 UnPack = "3a884ed6-31ef-47d7-9d2a-63182c4928ed"
 
 [compat]
-CairoMakie = "0.11.9 - 0.24"
-DifferentiationInterface = "0.6.54"
-Distributions = "0.25.120"
-Enzyme = "0.13.66"
-Pigeons = "0.4.9"
-Statistics = "1.10.0"
-Turing = "0.37.0"
+CairoMakie = "0.15.8"
+DifferentiationInterface = "0.7.12"
+Distributions = "0.25.122"
+Enzyme = "0.13.108"
+Pigeons = "0.4.8"
+Statistics = "1.11.1"
+Turing = "0.35.4"
 UnPack = "1.0.2"
-julia = "1.10"
+julia = "1.11"
 
 [extras]
 BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"

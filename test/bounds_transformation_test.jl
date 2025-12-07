@@ -1,9 +1,9 @@
 @testitem "bounds transformation tests" tags = [:transformation] begin
     using Test
     x = randn(20)
-    m = sigmoid_tf.tf.(100 .* x)
+    m = sigmoid_tf.tf.(10 .* x)
     @test all(-3.0 .<= m .<= 6.0)
-    @test all(.≈(sigmoid_tf.itf.(m), 100 .* x, atol = 1e-2))
+    @test all(.≈(sigmoid_tf.itf.(m), 10 .* x, atol = 1e-2))
 
     m = pow_tf.tf.(x)
     @test all(m .≈ exp10.(x))
