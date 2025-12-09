@@ -55,6 +55,7 @@ function get_model_list(chains::chain,
     return model_list
 end
 
+# COV_EXCL_START
 """
     get_ρ_at_z(pred, zs)
 
@@ -75,3 +76,4 @@ function get_ρ_at_z(pred, zs)
     res[idx] .= pred[n]
     return res
 end
+# COV_EXCL_STOP

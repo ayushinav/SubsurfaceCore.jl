@@ -27,6 +27,7 @@ jobs:
         version: ["1.11"]
         group:
           - "transformation"
+          - "mcmc"
     steps:
       - uses: actions/checkout@v6
 
