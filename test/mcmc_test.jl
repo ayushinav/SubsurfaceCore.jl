@@ -17,12 +17,12 @@
 
     n_samples = 10_000
     mcache = mcmc_cache(modelD, respD, n_samples, NUTS())
-    chains = stochastic_inverse(resp, err_resp, [], mcache, progress = false);
+    chains = stochastic_inverse(resp, err_resp, [], mcache, progress=false)
 
     m_list = get_model_list(chains, modelD)
 
     @test size(chains.value.data, 1) == n_samples
-    @test all(.≈(mean(chains.value.data, dims = 1)[1, 1:2], vcat(m.x1, m.x2), atol = 1e-1))
+    @test all(.≈(mean(chains.value.data, dims=1)[1, 1:2], vcat(m.x1, m.x2), atol=1e-1))
 
     @test length(m_list) == n_samples
     @test typeof(first(m_list)) <: testModel
@@ -47,12 +47,12 @@ end
 
     n_samples = 8192
     mcache = mcmc_cache(modelD, respD, n_samples, SliceSampler())
-    chains = stochastic_inverse(resp, err_resp, [], mcache);
+    chains = stochastic_inverse(resp, err_resp, [], mcache)
 
     m_list = get_model_list(chains, modelD)
 
     @test size(chains.value.data, 1) == n_samples
-    @test all(.≈(mean(chains.value.data, dims = 1)[1, 1:2], vcat(m.x1, m.x2), atol = 1e-1))
+    @test all(.≈(mean(chains.value.data, dims=1)[1, 1:2], vcat(m.x1, m.x2), atol=1e-1))
 
     @test length(m_list) == n_samples
     @test typeof(first(m_list)) <: testModel
