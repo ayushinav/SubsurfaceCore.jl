@@ -1,4 +1,4 @@
-using ReTestItems, InteractiveUtils, Hwloc, JET
+using ReTestItems, InteractiveUtils, Hwloc, JET, BenchmarkTools, Test
 
 @info sprint(versioninfo)
 

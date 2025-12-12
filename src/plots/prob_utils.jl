@@ -1,3 +1,4 @@
+# COV_EXCL_START
 """
     gaussian_kernel(u, σ² = 2)
 
@@ -387,3 +388,4 @@ function get_mean_std_image(args...; kwargs...)
     get_mean_std_image!(ax, args...; kwargs...)
     fig
 end
+# COV_EXCL_STOP

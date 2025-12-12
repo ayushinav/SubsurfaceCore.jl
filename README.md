@@ -1,6 +1,8 @@
 # SubsurfaceCore.jl
 
 [![SciML Code Style](https://img.shields.io/static/v1?label=code%20style&message=SciML&color=9558b2&labelColor=389826)](https://github.com/SciML/SciMLStyle)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ayushinav/SubsurfaceCore.jl/Tests.yml)
+[![codecov](https://codecov.io/gh/ayushinav/SubsurfaceCore.jl/graph/badge.svg?token=VQM6W3DUI4)](https://codecov.io/gh/ayushinav/SubsurfaceCore.jl)
 
 Provides functionality for Bayesian inference, for use in [Porosity.jl](https://github.com/ayushinav/Porosity.jl). While a quick rundown of the features and essentials is provided below, users are recommended to check out the downstream package and its documentation for more comprehensive tutorials.
 

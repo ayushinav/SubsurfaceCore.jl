@@ -1,3 +1,4 @@
+# COV_EXCL_START
 ## response plots
 
 """
@@ -189,3 +190,4 @@ function plot_model(model::m_type;
 
     fig, ax
 end
+# COV_EXCL_STOP
