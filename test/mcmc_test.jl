@@ -7,10 +7,8 @@
     m = testModel([2.0], [4.0])
     resp = forward(m, [])
 
-    modelD = testModelDistribution(
-        product_distribution([Uniform(0.0, 3.0)]),
-        product_distribution([Uniform(3.0, 5.0)]),
-    )
+    modelD = testModelDistribution(product_distribution([Uniform(0.0, 3.0)]),
+        product_distribution([Uniform(3.0, 5.0)]))
 
     respD = testResponseDistribution(normal_dist, normal_dist)
     err_resp = testResponse([0.1], [0.1])
@@ -37,10 +35,8 @@ end
     m = testModel([2.0], [4.0])
     resp = forward(m, [])
 
-    modelD = testModelDistribution(
-        product_distribution([Uniform(0.0, 3.0)]),
-        product_distribution([Uniform(3.0, 5.0)]),
-    )
+    modelD = testModelDistribution(product_distribution([Uniform(0.0, 3.0)]),
+        product_distribution([Uniform(3.0, 5.0)]))
 
     respD = testResponseDistribution(normal_dist, normal_dist)
     err_resp = testResponse([0.1], [0.1])

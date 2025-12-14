@@ -28,7 +28,7 @@ function get_model_list(chains::chain,
     pred = hcat(preds...)
     model_list = []
 
-    for i in axis(pred, 1)
+    for i in axes(pred, 1)
         m = []
         prev_length = 1
         for (j, k) in enumerate(fieldnames(model_type))

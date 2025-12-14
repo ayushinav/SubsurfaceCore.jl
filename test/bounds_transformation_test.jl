@@ -20,6 +20,12 @@
     m = lin_tf.tf.(x)
     @test all(m .≈ identity.(x))
     @test all(lin_tf.itf.(m) .≈ x)
+
+    # ==
+    my_scale_tf = transform_utils(x -> scale_fn(x, 10), x -> inverse_scale_fn(x, 10))
+    m = my_scale_tf.tf.(x)
+    @test all(m .≈ x ./ 10)
+    @test all(my_scale_tf.itf.(m) .≈ x)
 end
 
 @testitem "bounds transformation : allocations" tags = [:transformation] begin
@@ -75,6 +81,15 @@ end
     alloc_ = @allocated bench_tf(lin_tf, m)
     @test alloc_ == 0
 
+    # ==
+    my_scale_tf = transform_utils(x -> scale_fn(x, 10), x -> inverse_scale_fn(x, 10))
+    m = my_scale_tf.tf.(x)
+    bench_itf(my_scale_tf, m)
+    bench_tf(my_scale_tf, m)
+    alloc_ = @allocated bench_itf(my_scale_tf, m)
+    @test alloc_ == 0
+    alloc_ = @allocated bench_tf(my_scale_tf, m)
+    @test alloc_ == 0
 end
 
 @testitem "bounds transformation : type inference" tags = [:transformation] begin
@@ -110,4 +125,10 @@ end
     m = lin_tf.tf.(x)
     @test_opt bench_tf(lin_tf, m)
     @test_opt bench_itf(lin_tf, m)
+
+    # ==
+    my_scale_tf = transform_utils(x -> scale_fn(x, 10), x -> inverse_scale_fn(x, 10))
+    m = my_scale_tf.tf.(x)
+    @test_opt bench_tf(my_scale_tf, m)
+    @test_opt bench_itf(my_scale_tf, m)
 end
