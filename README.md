@@ -9,20 +9,16 @@ Provides functionality for Bayesian inference, for use in [Porosity.jl](https://
 
 ## Interface
 
-* `AbstractRockphyModel` is an abstract type for all types (e.g., conductivity, elastic, viscous and anelastic) of rock physics models.
-* `AbstractGeophyModel` is an abstract type to define models for all types of geophysical methods (e.g., magnetotelluric, DC resistivity, surface waves).
+  - `AbstractRockphyModel` is an abstract type for all types (e.g., conductivity, elastic, viscous and anelastic) of rock physics models.
 
-* `AbstractRockphyModelDistribution` has a structure very similar to that of `AbstractRockphyModel` but is useful to define *a priori* distribution for Bayesian inference of rock physics parameters from geophysical observables. `AbstractGeophyModelDistribution` defines the *a priori* for geophysical inference.
-
-* `AbstractRockphyResponse` is the abstract type for the estimates of geophysical observables obtained from rock physics models.
-* `AbstractGeophyResponse` is a similar abstract type to store geophysical responses.
-
-* Subtypes of `AbstractRockphyResponseDistribution` have the similar structure has the corresponding `AbstractRockphyResponse` subtype but defines the likelihood function for Bayesian inference of rock physics parameters. `AbstractGeophyResponseDistribution` has a similar role for geophysical models.
-
-* `mcmc_cache` : Defines the MCMC sampler to be used for inference, along with the *a priori* distribution, likelihood functions, and number of samples.
-
-* `transformation_utils` puts together all kinds of transformations commonly used for transformation of data in rock physics and geophysics, e.g. a simple case would be to convert the electrical conductivities to the log-scale.
+  - `AbstractGeophyModel` is an abstract type to define models for all types of geophysical methods (e.g., magnetotelluric, DC resistivity, surface waves).
+  - `AbstractRockphyModelDistribution` has a structure very similar to that of `AbstractRockphyModel` but is useful to define *a priori* distribution for Bayesian inference of rock physics parameters from geophysical observables. `AbstractGeophyModelDistribution` defines the *a priori* for geophysical inference.
+  - `AbstractRockphyResponse` is the abstract type for the estimates of geophysical observables obtained from rock physics models.
+  - `AbstractGeophyResponse` is a similar abstract type to store geophysical responses.
+  - Subtypes of `AbstractRockphyResponseDistribution` have the similar structure has the corresponding `AbstractRockphyResponse` subtype but defines the likelihood function for Bayesian inference of rock physics parameters. `AbstractGeophyResponseDistribution` has a similar role for geophysical models.
+  - `mcmc_cache` : Defines the MCMC sampler to be used for inference, along with the *a priori* distribution, likelihood functions, and number of samples.
+  - `transformation_utils` puts together all kinds of transformations commonly used for transformation of data in rock physics and geophysics, e.g. a simple case would be to convert the electrical conductivities to the log-scale.
 
 ## Functionalities
 
-* `stochastic_inverse` : perform Bayesian inference. Outputs the posterior distribution in the form of `MCMCChains`, which can be converted into a list of corresponding models using `get_model_list`.
+  - `stochastic_inverse` : perform Bayesian inference. Outputs the posterior distribution in the form of `MCMCChains`, which can be converted into a list of corresponding models using `get_model_list`.
