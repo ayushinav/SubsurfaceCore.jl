@@ -38,8 +38,6 @@ function pow_sigmoid(m, a, b)
     return exp10(sigmoid(m, a, b))
 end
 
-scale_fn(m::T1, scale::T2) where {T1, T2} = m * inv(scale)
-
 """
 `inverse_sigmoid()`: get back to the optimization domain from model domain
 """
@@ -53,8 +51,6 @@ end
 function inverse_pow_sigmoid(m, a, b)
     return inverse_sigmoid(log10(m), a, b)
 end
-
-inverse_scale_fn(x, scale) = x * scale
 
 #= 
 should generally be good for most inversions

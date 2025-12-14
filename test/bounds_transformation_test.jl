@@ -22,7 +22,7 @@
     @test all(lin_tf.itf.(m) .≈ x)
 
     # ==
-    my_scale_tf = transform_utils(x -> scale_fn(x, 10), x -> inverse_scale_fn(x, 10))
+    my_scale_tf = transform_utils(x -> (x/10), x -> (x * 10))
     m = my_scale_tf.tf.(x)
     @test all(m .≈ x ./ 10)
     @test all(my_scale_tf.itf.(m) .≈ x)
@@ -82,7 +82,7 @@ end
     @test alloc_ == 0
 
     # ==
-    my_scale_tf = transform_utils(x -> scale_fn(x, 10), x -> inverse_scale_fn(x, 10))
+    my_scale_tf = transform_utils(x -> (x/10), x -> (x * 10))
     m = my_scale_tf.tf.(x)
     bench_itf(my_scale_tf, m)
     bench_tf(my_scale_tf, m)
@@ -127,7 +127,7 @@ end
     @test_opt bench_itf(lin_tf, m)
 
     # ==
-    my_scale_tf = transform_utils(x -> scale_fn(x, 10), x -> inverse_scale_fn(x, 10))
+    my_scale_tf = transform_utils(x -> (x/10), x -> (x * 10))
     m = my_scale_tf.tf.(x)
     @test_opt bench_tf(my_scale_tf, m)
     @test_opt bench_itf(my_scale_tf, m)
