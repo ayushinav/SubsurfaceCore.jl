@@ -31,7 +31,7 @@ end
         rDist::rdist;
         response_fields::Vector{Symbol}= [k for k ∈ fieldnames(typeof(rDist))],
         model_fields::Vector{Symbol}= [k for k ∈ fieldnames(typeof(mDist))],
-        trans_utils::NamedTuple = (m = log_tf, h = lin_tf)
+        trans_utils::NamedTuple = (m = log_tf, h = no_tf)
         ) where {model <: AbstractModel, mdist <: AbstractModelDistribution, rdist <: AbstractResponseDistribution}
 
 makes a `Turing.jl` model to perform MCMC sampling
@@ -54,8 +54,8 @@ makes a `Turing.jl` model to perform MCMC sampling
         m_type, const_data, vars, r_obs::NamedTuple, err_resp, mDist::mdist, rDist::rdist,
         params; response_fields::Vector{Symbol}=[k for k in fieldnames(typeof(rDist))],
         model_fields::Vector{Symbol}=[k for k in fieldnames(typeof(mDist))],
-        model_trans_utils::NamedTuple=(m=lin_tf, h=lin_tf),
-        response_trans_utils::NamedTuple=(ρₐ=lin_tf, ϕ=lin_tf)) where {mdist, rdist}
+        model_trans_utils::NamedTuple=(m=no_tf, h=no_tf),
+        response_trans_utils::NamedTuple=(ρₐ=no_tf, ϕ=no_tf)) where {mdist, rdist}
     m0 = (; zip([keys(mDist)...], const_data)...)
 
     for k in model_fields

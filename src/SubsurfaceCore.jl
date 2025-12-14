@@ -37,7 +37,7 @@ export AbstractModelDistribution, AbstractResponseDistribution
 export AbstractGeophyModelDistribution, AbstractGeophyResponseDistribution
 export AbstractRockphyModelDistribution, AbstractRockphyResponseDistribution
 
-export transform_utils, sigmoid_tf, pow_tf, log_tf, pow_sigmoid_tf, lin_tf, phi_scale_tf
+export transform_utils, sigmoid_tf, pow_tf, log_tf, pow_sigmoid_tf, no_tf, phi_scale_tf
 export do_verbose
 
 # plots

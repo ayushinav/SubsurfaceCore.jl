@@ -4,7 +4,7 @@
         err_resp::response,
         vars,
         alg_cache::mcmc_cache;
-        model_trans_utils::NamedTuple = (m = lin_tf, h = lin_tf)
+        model_trans_utils::NamedTuple = (m = no_tf, h = no_tf)
         )
 
 function to perform sampling
@@ -25,7 +25,7 @@ function to perform sampling
   - `n_chains` : Number of chains to use
   - `model_trans_utils`: A named tuple containing `transform_utils` for the fields of model that need to be scaled/modified,
     defaults to no scaling.
-  - response_trans_utils`: A named tuple containing to scale/ modify the response.
+  - response_trans_utils`: A named tuple containing to scale/ modify the response, defaults to no scaling.
   - `response_fields` : fields of response to be used for inference
   - `kwargs` : keyword arguments to be splatted into sampling function
 """
@@ -66,7 +66,7 @@ function stochastic_inverse(r_obs::resp1, err_resp::resp2, vars, alg_cache::mcmc
         if k in keys(model_trans_utils)
             push!(trans_utils_arr, model_trans_utils[k])
         else
-            push!(trans_utils_arr, lin_tf)
+            push!(trans_utils_arr, no_tf)
         end
     end
 
@@ -77,7 +77,7 @@ function stochastic_inverse(r_obs::resp1, err_resp::resp2, vars, alg_cache::mcmc
         if k in keys(response_trans_utils)
             push!(trans_utils_arr, getfield(response_trans_utils, k))
         else
-            push!(trans_utils_arr, lin_tf)
+            push!(trans_utils_arr, no_tf)
         end
     end
 

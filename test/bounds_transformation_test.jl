@@ -17,9 +17,9 @@
     @test all(1e-3 .<= m .<= 1e6)
     @test all(pow_sigmoid_tf.itf.(m) .≈ 10 .* x)
 
-    m = lin_tf.tf.(x)
+    m = no_tf.tf.(x)
     @test all(m .≈ identity.(x))
-    @test all(lin_tf.itf.(m) .≈ x)
+    @test all(no_tf.itf.(m) .≈ x)
 
     # ==
     my_scale_tf = transform_utils(x -> (x/10), x -> (x * 10))
@@ -73,12 +73,12 @@ end
     alloc_ = @allocated bench_tf(pow_sigmoid_tf, m)
     @test alloc_ == 0
 
-    m = lin_tf.tf.(x)
-    bench_itf(lin_tf, m)
-    bench_tf(lin_tf, m)
-    alloc_ = @allocated bench_itf(lin_tf, m)
+    m = no_tf.tf.(x)
+    bench_itf(no_tf, m)
+    bench_tf(no_tf, m)
+    alloc_ = @allocated bench_itf(no_tf, m)
     @test alloc_ == 0
-    alloc_ = @allocated bench_tf(lin_tf, m)
+    alloc_ = @allocated bench_tf(no_tf, m)
     @test alloc_ == 0
 
     # ==
@@ -108,27 +108,27 @@ end
 
     m = sigmoid_tf.tf.(10 .* x)
     @test_opt bench_tf(sigmoid_tf, m)
-    @test_opt bench_itf(sigmoid_tf, m)
+    @test_call bench_itf(sigmoid_tf, m)
 
     m = pow_tf.tf.(x)
     @test_opt bench_tf(pow_tf, m)
-    @test_opt bench_itf(pow_tf, m)
+    @test_call bench_itf(pow_tf, m)
 
     m = log_tf.tf.(1 .+ abs(minimum(x)) .+ x)
     @test_opt bench_tf(log_tf, m)
-    @test_opt bench_itf(log_tf, m)
+    @test_call bench_itf(log_tf, m)
 
     m = pow_sigmoid_tf.tf.(10 .* x)
     @test_opt bench_tf(pow_sigmoid_tf, m)
-    @test_opt bench_itf(pow_sigmoid_tf, m)
+    @test_call bench_itf(pow_sigmoid_tf, m)
 
-    m = lin_tf.tf.(x)
-    @test_opt bench_tf(lin_tf, m)
-    @test_opt bench_itf(lin_tf, m)
+    m = no_tf.tf.(x)
+    @test_opt bench_tf(no_tf, m)
+    @test_call bench_itf(no_tf, m)
 
     # ==
     my_scale_tf = transform_utils(x -> (x/10), x -> (x * 10))
     m = my_scale_tf.tf.(x)
     @test_opt bench_tf(my_scale_tf, m)
-    @test_opt bench_itf(my_scale_tf, m)
+    @test_call bench_itf(my_scale_tf, m)
 end

@@ -28,6 +28,7 @@ jobs:
         group:
           - "transformation"
           - "mcmc"
+          - "utils"
     steps:
       - uses: actions/checkout@v6
 

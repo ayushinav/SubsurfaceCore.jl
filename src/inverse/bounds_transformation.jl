@@ -106,7 +106,7 @@ const pow_sigmoid_tf = transform_utils(
     x -> pow_sigmoid(x, -3.0f0, 6.0f0), x -> inverse_pow_sigmoid(x, -3.0f0, 6.0f0));
 
 """
-    lin_tf
+    no_tf
 
 A [`transform_utils`](@ref) constant that doesn't transform \n
 Default `transform_utils` if nothing else is provided
@@ -114,4 +114,4 @@ Default `transform_utils` if nothing else is provided
   - computational domain to model domain : m = x \n
   - model domain to computational domain : x = m \n
 """
-const lin_tf = transform_utils(identity, identity);
+const no_tf = transform_utils(identity, identity);
