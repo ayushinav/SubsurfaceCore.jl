@@ -19,7 +19,7 @@ function SubsurfaceCore.forward(m::testModel, vars, response_trans_utils=my_tf, 
     return testResponse(y1, y2)
 end
 
-from_nt(testModel, (; x1=[2.0], x2=[4.0]))
+my_model = from_nt(testModel, (; x1=[2.0], x2=[4.0]))
 
 mutable struct testModelDistribution{
     T1 <: Union{Distribution, AbstractArray}, T2 <: Union{Distribution, AbstractArray}} <:
