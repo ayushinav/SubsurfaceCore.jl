@@ -1,4 +1,4 @@
-@testitem "bounds transformation : accuracy" tags = [:transformation] begin
+@testitem "bounds transformation : accuracy" tags=[:transformation] begin
     x = randn(100)
 
     m = sigmoid_tf.tf.(10 .* x)
@@ -22,13 +22,13 @@
     @test all(no_tf.itf.(m) .≈ x)
 
     # ==
-    my_scale_tf = transform_utils(x -> (x/10), x -> (x * 10))
+    my_scale_tf = transform_utils(x -> (x / 10), x -> (x * 10))
     m = my_scale_tf.tf.(x)
     @test all(m .≈ x ./ 10)
     @test all(my_scale_tf.itf.(m) .≈ x)
 end
 
-@testitem "bounds transformation : allocations" tags = [:transformation] begin
+@testitem "bounds transformation : allocations" tags=[:transformation] begin
     function bench_tf(tf, x)
         broadcast!(tf.tf, x, x)
         return nothing
@@ -82,7 +82,7 @@ end
     @test alloc_ == 0
 
     # ==
-    my_scale_tf = transform_utils(x -> (x/10), x -> (x * 10))
+    my_scale_tf = transform_utils(x -> (x / 10), x -> (x * 10))
     m = my_scale_tf.tf.(x)
     bench_itf(my_scale_tf, m)
     bench_tf(my_scale_tf, m)
@@ -92,7 +92,7 @@ end
     @test alloc_ == 0
 end
 
-@testitem "bounds transformation : type inference" tags = [:transformation] begin
+@testitem "bounds transformation : type inference" tags=[:transformation] begin
     using JET
     function bench_tf(tf, x)
         broadcast!(tf.tf, x, x)
@@ -127,7 +127,7 @@ end
     @test_call bench_itf(no_tf, m)
 
     # ==
-    my_scale_tf = transform_utils(x -> (x/10), x -> (x * 10))
+    my_scale_tf = transform_utils(x -> (x / 10), x -> (x * 10))
     m = my_scale_tf.tf.(x)
     @test_opt bench_tf(my_scale_tf, m)
     @test_call bench_itf(my_scale_tf, m)

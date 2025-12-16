@@ -68,7 +68,8 @@ The above bounds the model domain in [-3, 6], to bound the model parameters in a
 \n
 `transform_utils(x -> sigmoid(x, (a, b)), x -> inverse_sigmoid(x, (a, b)));`
 """
-const sigmoid_tf = transform_utils(x -> sigmoid(x, -3.0f0, 6.0f0), x -> inverse_sigmoid(x, -3.0f0, 6.0f0));
+const sigmoid_tf = transform_utils(
+    x -> sigmoid(x, -3.0f0, 6.0f0), x -> inverse_sigmoid(x, -3.0f0, 6.0f0));
 
 """
     pow_tf
