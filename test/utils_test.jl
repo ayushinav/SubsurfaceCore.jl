@@ -1,4 +1,4 @@
-@testitem "utils" tags = [:utils] begin
+@testitem "utils" tags=[:utils] begin
     using Test, JET, Distributions
 
     include("test_model.jl")
