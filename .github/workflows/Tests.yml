@@ -2,6 +2,14 @@ name: "Tests"
 
 on:
   pull_request:
+    branches:
+      - main
+      - 'release-'
+    paths-ignore:
+      - 'docs/**'
+  push:
+    branches:
+      - main
     paths-ignore:
       - 'docs/**'
 
@@ -19,8 +27,10 @@ jobs:
         version: ["1.11"]
         group:
           - "transformation"
+          - "mcmc"
+          - "utils"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: "Setup Julia ${{ matrix.version }}"
         uses: julia-actions/setup-julia@v2

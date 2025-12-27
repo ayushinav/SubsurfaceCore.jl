@@ -1,6 +1,6 @@
 """
     get_model_list(chains::chain, mDist::mdist; 
-        trans_utils = (m = pow_tf, h = lin_tf,)) where {mdist <: AbstractModelDistribution, chain <: Chains}
+        trans_utils = (m = pow_tf, h = no_tf,)) where {mdist <: AbstractModelDistribution, chain <: Chains}
 
 returns a list of models from the `Chains` variable obtained from [`stochastic_inverse`](@ref)
 
@@ -11,7 +11,7 @@ returns a list of models from the `Chains` variable obtained from [`stochastic_i
 """
 function get_model_list(chains::chain,
         mDist::mdist;
-        trans_utils=(m=lin_tf, h=lin_tf)) where {
+        trans_utils=(m=no_tf, h=no_tf)) where {
         mdist <: AbstractModelDistribution, chain <: Chains}
     model_type = sample_type(mDist)
 
@@ -28,7 +28,7 @@ function get_model_list(chains::chain,
     pred = hcat(preds...)
     model_list = []
 
-    for i in 1:size(pred, 1)
+    for i in axes(pred, 1)
         m = []
         prev_length = 1
         for (j, k) in enumerate(fieldnames(model_type))
@@ -45,8 +45,8 @@ function get_model_list(chains::chain,
 
         for k in fieldnames(model_type)
             if k in keys(trans_utils)
-                getfield(model_sample, k) .= broadcast(
-                    getproperty(trans_utils[k], :tf), getfield(model_sample, k))
+                getfield(model_sample,
+                    k) .= broadcast(getproperty(trans_utils[k], :tf), getfield(model_sample, k))
             end
         end
 
@@ -55,6 +55,7 @@ function get_model_list(chains::chain,
     return model_list
 end
 
+# COV_EXCL_START
 """
     get_ρ_at_z(pred, zs)
 
@@ -75,3 +76,4 @@ function get_ρ_at_z(pred, zs)
     res[idx] .= pred[n]
     return res
 end
+# COV_EXCL_STOP
