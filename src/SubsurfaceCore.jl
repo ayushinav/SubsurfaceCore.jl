@@ -3,10 +3,8 @@ using CairoMakie
 using LinearAlgebra
 using Turing
 using Distributions
-using Pigeons
 using Statistics
 using Enzyme
-using DifferentiationInterface
 using UnPack
 import Base: show
 

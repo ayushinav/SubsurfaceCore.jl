@@ -50,11 +50,20 @@ function stochastic_inverse(r_obs::resp1, err_resp::resp2, vars, alg_cache::mcmc
         end
     end
 
+    const_values = map(keys(apriori)) do k
+        val = getfield(apriori, k)
+        if val isa Distribution
+            return rand(val)
+        else
+            return val
+        end
+    end
+
     likelihood = to_dist_nt(alg_cache.likelihood)
     if response_fields == Symbol[]
         for k in keys(likelihood) # similarly, here it will be propertynames for likelihood being a NamedTuple
             if typeof(getfield(likelihood, k)) <: Function
-                push!(response_fields, k)
+                push!(response_fields, Symbol(k))
             end
         end
     end
@@ -98,13 +107,12 @@ function stochastic_inverse(r_obs::resp1, err_resp::resp2, vars, alg_cache::mcmc
     """
     @info msg
 
-    mcmc_model = mcmc_turing(m_type, const_data, vars, to_resp_nt(r_obs), # ::NamedTuple
+    mcmc_model = mcmc_turing(m_type, const_values, vars, to_resp_nt(r_obs), # ::NamedTuple
         to_resp_nt(err_resp), # ::response
         apriori, # ::NamedTuple
         likelihood, # ::responseDistribution
-        params; response_fields=Symbol.(response_fields),
-        model_fields=Symbol.(model_fields), model_trans_utils=transf_utils,
-        response_trans_utils=response_trans_utils)
+        params, transf_utils, response_trans_utils, 
+        response_fields, model_fields)
 
     if typeof(alg_cache.sampler).name.module === Pigeons
         n_rounds = Int(round(log2(alg_cache.n_samples)))
