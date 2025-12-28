@@ -50,19 +50,32 @@ makes a `Turing.jl` model to perform MCMC sampling
   - `model_fields`: fields in `model` to draw inference on
   - `trans_utils`: to transform the model field variables to and from computational (inference) domain
 """
-@model function mcmc_turing(
-        m_type, const_data, vars, r_obs, err_resp, mDist::mdist, rDist::rdist,
+@model function mcmc_turing(const_nt, 
+        # ::Val{m_type}, vars, r_obs, err_resp, mDist::mdist, rDist::rdist,
+        vars, r_obs, err_resp, mDist::mdist, rDist::rdist,
         params, model_trans_utils, response_trans_utils,
         response_fields, model_fields) where {mdist, rdist}
     # m0 = (; zip([keys(mDist)...], const_data)...)
-    m0 = NamedTuple{keys(mDist)}(const_data)
+    # m0 = NamedTuple{keys(mDist)}(const_values)
 
-    for k in model_fields
-        m0[k] ~ getfield(mDist, k)
-        broadcast!(getfield(model_trans_utils, k).tf, m0[k], m0[k])
+    m_ = map(model_fields) do k
+        val ~ getfield(mDist, k)
+        broadcast!(getfield(model_trans_utils, k).tf, val, val)
+        return val
     end
 
-    r_sample = forward_helper(m_type, m0, vars, response_trans_utils, params)
+    m_type = sample_type(mDist)
+
+    var_nt = NamedTuple{model_fields}(m_)
+    total_nt = merge(var_nt, const_nt)
+
+
+    # for k in model_fields
+    #     m0[k] ~ getfield(mDist, k)
+    #     broadcast!(getfield(model_trans_utils, k).tf, m0[k], m0[k])
+    # end
+
+    r_sample = forward_helper(m_type, total_nt, vars, response_trans_utils, params)
 
     for k in response_fields
         r_obs[k] ~ getfield(rDist, k)(getfield(r_sample, k), getfield(err_resp, k) .^ 2)

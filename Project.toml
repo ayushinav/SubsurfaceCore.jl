@@ -17,7 +17,7 @@ CairoMakie = "0.15"
 Distributions = "0.25"
 Enzyme = "0.13"
 Statistics = "1.11.1"
-Turing = "0.35 - 0.42"
+Turing = "0.41 - 0.42"
 UnPack = "1.0.2"
 julia = "1.11"
 

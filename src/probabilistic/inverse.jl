@@ -33,9 +33,10 @@ function stochastic_inverse(r_obs::resp1, err_resp::resp2, vars, alg_cache::mcmc
         n_chains=2, model_trans_utils::NamedTuple=(;), # need to take care of this
         response_trans_utils::NamedTuple=(;), params=(;), response_fields=Symbol[],
         kwargs...) where {resp1 <: AbstractResponse, resp2 <: AbstractResponse}
-    model_fields = Symbol[]
+    model_fields_ = Symbol[]
     # modelD = []
     const_data = []
+    const_fields_ = Symbol[]
 
     # segregate the constants and the Distribution parts of the alg_cache
 
@@ -43,21 +44,24 @@ function stochastic_inverse(r_obs::resp1, err_resp::resp2, vars, alg_cache::mcmc
 
     for k in keys(apriori)
         if typeof(getfield(apriori, k)) <: Distribution
-            push!(model_fields, k)
-            push!(const_data, rand(getfield(apriori, k)))
+            push!(model_fields_, Symbol(k))
+            # push!(const_data, rand(getfield(apriori, k)))
         else
             push!(const_data, getfield(apriori, k))
+            push!(const_fields_, Symbol(k))
         end
     end
 
-    const_values = map(keys(apriori)) do k
-        val = getfield(apriori, k)
-        if val isa Distribution
-            return rand(val)
-        else
-            return val
-        end
-    end
+    const_fields = Tuple(const_fields_)
+    model_fields = Tuple(model_fields_)
+    const_nt = NamedTuple{const_fields}(const_data)
+
+    # const_values = map(keys(apriori)) do k
+    #     val = getfield(apriori, k)
+    #     if !(val isa Distribution)
+    #         return val
+    #     end
+    # end
 
     likelihood = to_dist_nt(alg_cache.likelihood)
     if response_fields == Symbol[]
@@ -107,25 +111,16 @@ function stochastic_inverse(r_obs::resp1, err_resp::resp2, vars, alg_cache::mcmc
     """
     @info msg
 
-    mcmc_model = mcmc_turing(m_type, const_values, vars, to_resp_nt(r_obs), # ::NamedTuple
+    # m0 = NamedTuple{keys(apriori)}(const_values)
+    mcmc_model = mcmc_turing(const_nt, vars, to_resp_nt(r_obs), # ::NamedTuple
         to_resp_nt(err_resp), # ::response
-        apriori, # ::NamedTuple
+        alg_cache.apriori, # ::NamedTuple
         likelihood, # ::responseDistribution
         params, transf_utils, response_trans_utils, 
         response_fields, model_fields)
 
-    if typeof(alg_cache.sampler).name.module === Pigeons
-        n_rounds = Int(round(log2(alg_cache.n_samples)))
-        pt = pigeons(; target=TuringLogPotential(mcmc_model), n_chains=n_chains, # Λ ~ 6
-            n_rounds=n_rounds,   # low to speed up CI
-            record=[traces; round_trip; record_default()], kwargs...)
-        return Chains(pt)
-    else
-        if typeof(alg_cache.sampler) <: Turing.AdvancedVI.VariationalInference
-            return vi(mcmc_model, alg_cache.sampler)
-        else
-            return Turing.sample(mcmc_model, alg_cache.sampler,
-                alg_cache.n_samples; verbose=false, kwargs...)
-        end
-    end
+    # return Turing.sample(mcmc_model, alg_cache.sampler,
+    #     alg_cache.n_samples; verbose=false, kwargs...)
+
+    return mcmc_model
 end

@@ -44,6 +44,9 @@ default_params(::Type{Nothing}) = (;) # COV_EXCL_LINE
 function forward_helper(
         m::Type{T}, m0, vars, response_trans_utils, params) where {T <: AbstractModel}
     model = from_nt(m, m0)
-    resp_nt = to_resp_nt(forward(model, vars, response_trans_utils, params))
+    resp_nt = to_resp_nt(forward(model, vars, params))
+    for k in propertynames(resp_nt)
+        broadcast!(response_trans_utils[k].tf, resp_nt[k], resp_nt[k])
+    end
     return resp_nt
 end
