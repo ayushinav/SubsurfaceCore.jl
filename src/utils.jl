@@ -15,23 +15,24 @@ function from_nt(::Type{Nothing}; nt::NamedTuple)
     (;)
 end
 
-@generated function from_nt(::Type{T}, nt::NamedTuple) where {T}
-    fnames = fieldnames(T)
-    args = [:(getproperty(nt, $(QuoteNode(f)))) for f in fnames]
-    return :(T($(args...)))
+function from_nt(::Type{m}, vars) where {m}
+    # construct a tuple containing the values for the type in m
+    vals = map(fieldnames(m)) do k
+        getfield(vars, k)
+    end
+
+    m(vals...)
 end
 
 to_nt(::Nothing) = (;) # COV_EXCL_LINE
 
-@generated function to_nt_impl(s, ::Val{F}) where {F}
-    exs = [:(getfield(s, $(QuoteNode(fname)))) for fname in F]
-    :(NamedTuple{$F}(($(exs...),)))
-end
+function to_nt(m)
+    # construct a tuple containing the values for the type in m
+    vals = map(propertynames(m)) do k
+        getproperty(m, k)
+    end
 
-function to_nt(s)
-    T = typeof(s)
-    N = fieldnames(T)
-    to_nt_impl(s, Val(N))
+    NamedTuple{propertynames(m)}(vals)
 end
 
 to_resp_nt(d::T) where {T <: AbstractResponse} = to_nt(d)
