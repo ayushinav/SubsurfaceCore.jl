@@ -44,7 +44,7 @@ end
         half_space_depth=nothing,
         kde_transformation_fn = identity,
         return_kde_mat=false,
-        trans_utils=(m=lin_tf, h=lin_tf),
+        trans_utils=(m=no_tf, h=no_tf),
         grid=(m=collect(-1:0.1:5), z=cumsum(mDist.h)))
 
 plots on `fig`, a heatmap of probability distributions sampled by a `chain` using kernel density estimation
@@ -61,7 +61,7 @@ plots on `fig`, a heatmap of probability distributions sampled by a `chain` usin
   - `half_space_depth` : extent of half space, i.e., the last layer, informs how far to extend the half space, defaults to `1.25 × last `
   - `kde_transformation_fn` : a function that transforms the image domain, eg., use `log10` to plot log pdf; defaults to `identity` which implies no bounds_transformation
   - `return_kde_mat` : whether to return the matrix containing the values of heatmap along with corresponding x,y axes; defaults to `false`
-  - `trans_utils` : `NamedTuple` containing functions to transform the samples; defaults to no `lin_tf` for all parameters
+  - `trans_utils` : `NamedTuple` containing functions to transform the samples; defaults to no `no_tf` for all parameters
   - `grid` : `NamedTuple` containing grid to evaluate the kernel density on. `m` refers to the points to evaluate kde of model parameters,
     `z` refers to the depth points at which the model samples are inferred, not used if `h` is not sampled.
   - `kwargs` : keyword arguments to be splatted for customizing heatmap
@@ -78,7 +78,7 @@ function get_kde_image!(ax,
         half_space_depth=nothing,
         kde_transformation_fn=identity,
         return_kde_mat=false,
-        trans_utils=(m=lin_tf, h=lin_tf),
+        trans_utils=(m=no_tf, h=no_tf),
         grid=(m=collect(-1:0.1:5), z=cumsum(mDist.h)),
         kwargs...) where {C <: Chains,
         mdist <: AbstractGeophyModelDistribution{<:Distribution, <:AbstractVector}}
@@ -133,7 +133,7 @@ function get_kde_image!(ax,
     m_length = length(rand(mDist.m))
     h_length = length(rand(mDist.h))
 
-    trans_utils_ = (; m=lin_tf, h=lin_tf, trans_utils...)
+    trans_utils_ = (; m=no_tf, h=no_tf, trans_utils...)
 
     broadcast!(trans_utils_.h.tf, view(pred, :, (m_length + 1):(m_length + h_length)),
         view(pred, :, (m_length + 1):(m_length + h_length)))
@@ -155,7 +155,7 @@ function get_kde_image!(ax,
         kde_img[:, i] .= kde_img[:, i] ./ norm_factor
     end
 
-    ms = broadcast(trans_utils.m.tf, grid.m)
+    ms = broadcast(trans_utils_.m.tf, grid.m)
     hm = heatmap!(ax, ms, zs, kde_transformation_fn.(kde_img); kwargs...)
     ax.yreversed = true
 
@@ -179,7 +179,7 @@ end
         half_space_depth=nothing,
         kde_transformation_fn = identity,
         return_kde_mat=false,
-        trans_utils=(m=lin_tf, h=lin_tf),
+        trans_utils=(m=no_tf, h=no_tf),
         grid=(m=collect(-1:0.1:5), z=cumsum(mDist.h)))
 
 returns `fig`, a heatmap of probability distributions sampled by a `chain` using kernel density estimation
@@ -198,7 +198,7 @@ returns `fig`, a heatmap of probability distributions sampled by a `chain` using
   - `half_space_depth` : extent of half space, i.e., the last layer, informs how far to extend the half space, defaults to `1.25 × last `
   - `kde_transformation_fn` : a function that transforms the image domain, eg., use `log10` to plot log pdf; defaults to `identity` which implies no bounds_transformation
   - `return_kde_mat` : whether to return the matrix containing the values of heatmap along with corresponding x,y axes; defaults to `false`
-  - `trans_utils` : `NamedTuple` containing functions to transform the samples; defaults to no `lin_tf` for all parameters
+  - `trans_utils` : `NamedTuple` containing functions to transform the samples; defaults to no `no_tf` for all parameters
   - `grid` : `NamedTuple` containing grid to evaluate the kernel density on. `m` refers to the points to evaluate kde of model parameters,
     `z` refers to the depth points at which the model samples are inferred, not used if `h` is not sampled.
 
@@ -226,7 +226,7 @@ end
         confidence_interval=0.95,
         half_space_depth=nothing,
         plot_kwargs=nothing,
-        trans_utils=(m=lin_tf, h=lin_tf))
+        trans_utils=(m=no_tf, h=no_tf))
 
 plots on `ax`, a bounds plot (using mean and std deviation) of probability distributions sampled by a `chain` using kernel density estimation
 
@@ -242,7 +242,7 @@ plots on `ax`, a bounds plot (using mean and std deviation) of probability distr
   - `half_space_depth` : extent of half space, i.e., the last layer, informs how far to extend the half space, defaults to `1.25 × last `
   - `plot_kwargs` : `NamedTuple` containing keyword arguments for plots
   - `return_kde_mat` : whether to return the matrix containing the values of heatmap along with corresponding x,y axes; defaults to `false`
-  - `trans_utils` : `NamedTuple` containing functions to transform the samples; defaults to no `lin_tf` for all parameters
+  - `trans_utils` : `NamedTuple` containing functions to transform the samples; defaults to no `no_tf` for all parameters
   - `z_points` : depth points at which bounds are plotted, not used if `h` is not sampled; defaults to depths corresponding to `mean(h)`
 
 !!! note
@@ -258,7 +258,7 @@ function get_mean_std_image!(ax,
         mean_kwargs=(;),
         std_plus_kwargs=(;),
         std_minus_kwargs=(;),
-        trans_utils=(m=lin_tf, h=lin_tf),
+        trans_utils=(m=no_tf, h=no_tf),
         z_points=cumsum(mDist.h)) where {C <: Chains,
         mdist <: AbstractGeophyModelDistribution{<:Distribution, <:AbstractVector}}
     preds = []
@@ -293,8 +293,8 @@ function get_mean_std_image!(ax,
     m_ub = from_nt(m_type, (; m=trans_utils.m.tf.(μ₊_m), const_nt...))
     m_lb = from_nt(m_type, (; m=trans_utils.m.tf.(μ₋_m), const_nt...))
     plot_model!(ax, m_mean; mean_kwargs...)
-    plot_model!(ax, m_ub(trans_utils.m.tf.(μ₊_m), mDist.h); std_plus_kwargs...)
-    plot_model!(ax, m_lb(trans_utils.m.tf.(μ₋_m), mDist.h); std_minus_kwargs...)
+    plot_model!(ax, m_ub; std_plus_kwargs...)
+    plot_model!(ax, m_lb; std_minus_kwargs...)
 
     nothing
 end
@@ -319,7 +319,7 @@ function get_mean_std_image!(ax,
     m_length = length(rand(mDist.m))
     h_length = length(rand(mDist.h))
 
-    trans_utils_ = (; m=lin_tf, h=lin_tf, trans_utils...)
+    trans_utils_ = (; m=no_tf, h=no_tf, trans_utils...)
 
     broadcast!(trans_utils_.h.tf, view(pred, :, (m_length + 1):(m_length + h_length)),
         view(pred, :, (m_length + 1):(m_length + h_length)))
@@ -358,7 +358,7 @@ end
         confidence_interval=0.95,
         half_space_depth=nothing,
         plot_kwargs=nothing,
-        trans_utils=(m=lin_tf, h=lin_tf))
+        trans_utils=(m=no_tf, h=no_tf))
 
 return `fig`, a figure with a bounds plot (using mean and std deviation) of probability distributions sampled by a `chain` using kernel density estimation
 
@@ -374,7 +374,7 @@ return `fig`, a figure with a bounds plot (using mean and std deviation) of prob
   - `half_space_depth` : extent of half space, i.e., the last layer, informs how far to extend the half space, defaults to `1.25 × last `
   - `plot_kwargs` : `NamedTuple` containing keyword arguments for plots
   - `return_kde_mat` : whether to return the matrix containing the values of heatmap along with corresponding x,y axes; defaults to `false`
-  - `trans_utils` : `NamedTuple` containing functions to transform the samples; defaults to no `lin_tf` for all parameters
+  - `trans_utils` : `NamedTuple` containing functions to transform the samples; defaults to no `no_tf` for all parameters
   - `z_points` : depth points at which bounds are plotted, not used if `h` is not sampled; defaults to depths corresponding to `mean(h)`
 
 !!! note
