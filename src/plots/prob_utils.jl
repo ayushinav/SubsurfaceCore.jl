@@ -36,16 +36,15 @@ end
 
 """
     get_kde_image!(ax,
-        chain::C,
-        mDist::mdist;
-        hm_kwargs=(;),
-        cb_kwargs=(;),
+        chain,
+        mDist,
         K=gaussian_kernel,
         half_space_depth=nothing,
         kde_transformation_fn = identity,
         return_kde_mat=false,
         trans_utils=(m=no_tf, h=no_tf),
-        grid=(m=collect(-1:0.1:5), z=cumsum(mDist.h)))
+        grid=(m=collect(-1:0.1:5), z=cumsum(mDist.h)),
+        kwargs...)
 
 plots on `fig`, a heatmap of probability distributions sampled by a `chain` using kernel density estimation
 
@@ -60,7 +59,7 @@ plots on `fig`, a heatmap of probability distributions sampled by a `chain` usin
   - `K` : kernel used to perform kernel density estimation
   - `half_space_depth` : extent of half space, i.e., the last layer, informs how far to extend the half space, defaults to `1.25 × last `
   - `kde_transformation_fn` : a function that transforms the image domain, eg., use `log10` to plot log pdf; defaults to `identity` which implies no bounds_transformation
-  - `return_kde_mat` : whether to return the matrix containing the values of heatmap along with corresponding x,y axes; defaults to `false`
+  - `return_kde_mat` : whether to return the matrix containing the values of heatmap; defaults to `false`
   - `trans_utils` : `NamedTuple` containing functions to transform the samples; defaults to no `no_tf` for all parameters
   - `grid` : `NamedTuple` containing grid to evaluate the kernel density on. `m` refers to the points to evaluate kde of model parameters,
     `z` refers to the depth points at which the model samples are inferred, not used if `h` is not sampled.
@@ -173,34 +172,31 @@ end
 """
     get_kde_image(chain,
         mDist;
-        hm_kwargs=(;),
-        cb_kwargs=(;),
         K=gaussian_kernel,
         half_space_depth=nothing,
         kde_transformation_fn = identity,
         return_kde_mat=false,
         trans_utils=(m=no_tf, h=no_tf),
-        grid=(m=collect(-1:0.1:5), z=cumsum(mDist.h)))
+        grid=(m=collect(-1:0.1:5), z=cumsum(mDist.h)),
+        kwargs...)
 
 returns `fig`, a heatmap of probability distributions sampled by a `chain` using kernel density estimation
 
 ## Arguments
 
-  - `fig` : Figure on which the heatmap is plotted
   - `chain` : samples in the form `Turing.Chains` from an MCMC sampling
   - `mDist` : *apriori* model distribution used for MCMC sampling
 
 ## Keyword Arguments
 
-  - `hm_kwargs` : `NamedTuple` containing keyword arguments for customizing heatmap
-  - `cb_kwargs` : `NamedTuple` containing keyword arguments for customizing colorbar
   - `K` : kernel used to perform kernel density estimation
   - `half_space_depth` : extent of half space, i.e., the last layer, informs how far to extend the half space, defaults to `1.25 × last `
   - `kde_transformation_fn` : a function that transforms the image domain, eg., use `log10` to plot log pdf; defaults to `identity` which implies no bounds_transformation
-  - `return_kde_mat` : whether to return the matrix containing the values of heatmap along with corresponding x,y axes; defaults to `false`
+  - `return_kde_mat` : whether to return the matrix containing the values of heatmap; defaults to `false`
   - `trans_utils` : `NamedTuple` containing functions to transform the samples; defaults to no `no_tf` for all parameters
   - `grid` : `NamedTuple` containing grid to evaluate the kernel density on. `m` refers to the points to evaluate kde of model parameters,
     `z` refers to the depth points at which the model samples are inferred, not used if `h` is not sampled.
+  - `kwargs` : keyword arguments to be splatted for customizing heatmap
 
 !!! note
 
@@ -225,14 +221,17 @@ end
         mDist;
         confidence_interval=0.95,
         half_space_depth=nothing,
-        plot_kwargs=nothing,
-        trans_utils=(m=no_tf, h=no_tf))
+        mean_kwargs=(;),
+        std_plus_kwargs=(;),
+        std_minus_kwargs=(;),
+        trans_utils=(;),
+        z_points=cumsum(mean(mDist.h)))
 
 plots on `ax`, a bounds plot (using mean and std deviation) of probability distributions sampled by a `chain` using kernel density estimation
 
 ## Arguments
 
-  - `fig` : Axis on which the probability bounds are plotted
+  - `ax` : `Axis` on which the probability bounds are plotted
   - `chain` : samples in the form `Turing.Chains` from an MCMC sampling
   - `mDist` : *apriori* model distribution used for MCMC sampling
 
@@ -258,7 +257,7 @@ function get_mean_std_image!(ax,
         mean_kwargs=(;),
         std_plus_kwargs=(;),
         std_minus_kwargs=(;),
-        trans_utils=(m=no_tf, h=no_tf),
+        trans_utils=(;),
         z_points=cumsum(mDist.h)) where {C <: Chains,
         mdist <: AbstractGeophyModelDistribution{<:Distribution, <:AbstractVector}}
     preds = []
@@ -266,6 +265,7 @@ function get_mean_std_image!(ax,
         push!(preds, chain[k].data[:])
     end
     pred = hcat(preds...)
+    trans_utils_ = (; m=no_tf, h=no_tf, trans_utils...)
 
     m_type = sample_type(mDist)
 
@@ -278,14 +278,11 @@ function get_mean_std_image!(ax,
     μ₊_m = [quantile(pred[:, i], 1 - (1 - confidence_interval) / 2) for i in axes(pred, 2)]
     μ₋_m = [quantile(pred[:, i], (1 - confidence_interval) / 2) for i in axes(pred, 2)]
 
-    # @show μ₋_m
-    # @show μ₊_m
-
     isnothing(half_space_depth) && (half_space_depth = sum(mDist.h) * 1.25)
 
     mean_kwargs = (; label="mean", color=:blue, mean_kwargs...)
 
-    std_plus_kwargs = (label="$(100* round(confidence_interval))% bounds",
+    std_plus_kwargs = (label="$(round(100* confidence_interval))% bounds",
         color=:green, std_plus_kwargs...)
     std_minus_kwargs = (color=:green, std_minus_kwargs...)
 
@@ -341,7 +338,7 @@ function get_mean_std_image!(ax,
 
     mean_kwargs = (; label="mean", color=:blue, mean_kwargs...)
 
-    std_plus_kwargs = (label="$(100 * round(confidence_interval))% bounds",
+    std_plus_kwargs = (label="$(round(100* confidence_interval))% bounds",
         color=:green, std_plus_kwargs...)
     std_minus_kwargs = (color=:green, std_minus_kwargs...)
 
@@ -357,14 +354,15 @@ end
         mDist;
         confidence_interval=0.95,
         half_space_depth=nothing,
-        plot_kwargs=nothing,
+        mean_kwargs=(;),
+        std_plus_kwargs=(;),
+        std_minus_kwargs=(;),
         trans_utils=(m=no_tf, h=no_tf))
 
 return `fig`, a figure with a bounds plot (using mean and std deviation) of probability distributions sampled by a `chain` using kernel density estimation
 
 ## Arguments
 
-  - `fig` : Axis on which the probability bounds are plotted
   - `chain` : samples in the form `Turing.Chains` from an MCMC sampling
   - `mDist` : *apriori* model distribution used for MCMC sampling
 
