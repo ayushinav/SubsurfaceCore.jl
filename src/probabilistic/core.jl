@@ -50,22 +50,24 @@ makes a `Turing.jl` model to perform MCMC sampling
   - `model_fields`: fields in `model` to draw inference on
   - `trans_utils`: to transform the model field variables to and from computational (inference) domain
 """
-@model function mcmc_turing(const_nt, ::Val{m_type},
+@model function mcmc_turing(var_nt, const_nt, ::Val{m_type},
         # ::Val{m_type}, vars, r_obs, err_resp, mDist::mdist, rDist::rdist,
         vars, r_obs, err_resp, mDist::mdist, rDist::rdist,
         params, model_trans_utils, response_trans_utils,
         response_fields, model_fields, count) where {mdist, rdist, m_type}
 
-    m_ = map(model_fields) do k
-        var ~ getfield(mDist, k)
-        broadcast!(getfield(model_trans_utils, k).tf, var, var)
-        return var
+    m = merge(const_nt, var_nt)
+
+    for k in model_fields
+        
+        m[k] ~ getfield(mDist, k)
+        
+        broadcast!(getfield(model_trans_utils, k).tf, m[k], m[k])
     end
 
-    # count.c +=1 
+    count.c +=1 
 
-    var_nt = NamedTuple{model_fields}(m_)
-    total_nt = merge(const_nt, var_nt)
+    total_nt = m
 
     r_sample = forward_helper(m_type, total_nt, vars, response_trans_utils, params)
 

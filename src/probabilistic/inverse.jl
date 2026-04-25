@@ -46,6 +46,11 @@ function stochastic_inverse(
 
     const_nt = filter(k -> !isa(k, Distribution), apriori)
     model_fields = filter(k -> isa(getfield(apriori, k), Distribution), keys(apriori))
+    
+    var_tp = map(model_fields) do k
+        rand(getfield(apriori, k))
+    end
+    var_nt = NamedTuple{model_fields}(var_tp)
 
     resp_nt = to_resp_nt(r_obs)
     likelihood = to_dist_nt(alg_cache.likelihood)
@@ -78,8 +83,8 @@ function stochastic_inverse(
     @info msg
 
     k = counter(1)
-
-    mcmc_model = mcmc_turing(const_nt, #
+    
+    mcmc_model = mcmc_turing(var_nt, const_nt, #
         Val(m_type), vars, resp_nt, # ::NamedTuple
         to_resp_nt(err_resp), # ::response
         apriori, # ::NamedTuple
