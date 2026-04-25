@@ -148,11 +148,16 @@ function plot_model!(ax,
     m = model.m
     h = model.h
 
+    xlabel_, ylabel_ = get_labels(m_type)
+
     m_vec = [m[1], m...]
     h_v = cumsum(h)
     h_vec = [1.0f-2, h_v..., half_space_thickness]
 
     stairs!(ax, m_vec, h_vec; step=:post, kwargs...)
+    ax.xscale = first(get_scales(m_type))
+    ax.xlabel = xlabel_
+    ax.ylabel = ylabel_
     ax.yreversed = true
     nothing
 end
