@@ -1,6 +1,6 @@
 @testitem "MCMC : NUTS" tags=[:mcmc] begin
     using Test
-    using Distributions, Turing, Pigeons
+    using Distributions, Turing
 
     include("test_model.jl")
 
@@ -27,7 +27,7 @@ end
 
 @testitem "MCMC : SliceSampler" tags=[:mcmc] begin
     using Test
-    using Distributions, Turing, Pigeons
+    using Distributions, Pigeons
 
     include("test_model.jl")
 

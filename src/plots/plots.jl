@@ -24,6 +24,7 @@ parameterized on `vars`
       + `:plot` : data points are connected in a curve
       + `:errors` : plot errors along with the data points
         Defaults to `:plot`
+
   - `kwargs` : keyword arguments to be splatted into the `Makie` plotting routine
 
 ## Usage
@@ -100,6 +101,7 @@ parameterized on `vars`
       + `:plot` : data points are connected in a curve
       + `:errors` : plot errors along with the data points
         Defaults to `:plot`
+
   - `kwargs` : keyword arguments to be splatted into the `Makie` plotting routine
 
 ## Usage

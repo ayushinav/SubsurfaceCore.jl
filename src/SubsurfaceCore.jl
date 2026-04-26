@@ -1,7 +1,6 @@
 module SubsurfaceCore
 using CairoMakie
 using LinearAlgebra
-using Turing
 using Distributions
 using Statistics
 using Enzyme

@@ -1,9 +1,11 @@
+mutable struct counter{T}
+    c::T
+end
+
 """
     mutable struct struct mcmc_cache{T1 <: AbstractGeophyModelDistribution, T2 <: AbstractGeophyResponseDistribution}
         apriori::T1
         likelihood::T2
-        n_samples::Int
-        sampler
     end
 
 placeholder to store
@@ -17,8 +19,6 @@ mutable struct mcmc_cache{
     T1 <: AbstractModelDistribution, T2 <: AbstractResponseDistribution}
     apriori::T1
     likelihood::T2
-    n_samples::Int
-    sampler
 end
 
 """
@@ -52,26 +52,25 @@ makes a `Turing.jl` model to perform MCMC sampling
 """
 @model function mcmc_turing(var_nt, const_nt, ::Val{m_type},
         # ::Val{m_type}, vars, r_obs, err_resp, mDist::mdist, rDist::rdist,
-        vars, r_obs, err_resp, mDist::mdist, rDist::rdist,
-        params, model_trans_utils, response_trans_utils,
-        response_fields, model_fields, count) where {mdist, rdist, m_type}
-
+        vars, r_obs, err_resp, mDist::mdist, rDist::rdist, params,
+        model_trans_utils, response_trans_utils, response_fields,
+        model_fields, count) where {mdist, rdist, m_type}
     m = merge(const_nt, var_nt)
 
     for k in model_fields
-        
         m[k] ~ getfield(mDist, k)
-        
+
         broadcast!(getfield(model_trans_utils, k).tf, m[k], m[k])
     end
 
-    count.c +=1 
+    count.c += 1
 
     total_nt = m
 
+    # r_sample = forward_helper2(m_type, total_nt, vars, model_trans_utils, response_trans_utils, params)
     r_sample = forward_helper(m_type, total_nt, vars, response_trans_utils, params)
 
     for k in response_fields
         r_obs[k] ~ getfield(rDist, k)(getfield(r_sample, k), getfield(err_resp, k) .^ 2)
-    end 
+    end
 end
