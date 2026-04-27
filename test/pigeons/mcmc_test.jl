@@ -2,7 +2,7 @@
     using Test
     using Distributions, Pigeons
 
-    include("test_model.jl")
+    include("../test_model.jl")
 
     m = testModel([2.0], [4.0])
     resp = forward(m, [])
@@ -13,8 +13,8 @@
     err_resp = testResponse([0.1], [0.1])
 
     n_samples = 8192
-    mcache = mcmc_cache(modelD, respD, n_samples, SliceSampler())
-    chains = stochastic_inverse(resp, err_resp, [], mcache)
+    mcache = mcmc_cache(modelD, respD)
+    chains = stochastic_inverse(resp, err_resp, nothing, mcache, SliceSampler(), n_samples)
 
     m_list = get_model_list(chains, modelD)
 
@@ -27,9 +27,9 @@ end
 
 @testitem "MCMC : SliceSampler II" tags=[:pigeons] begin
     using Test
-    using Distributions, Turing
+    using Distributions, Pigeons
 
-    include("test_model.jl")
+    include("../test_model.jl")
 
     m = testModel([2.0], [4.0])
     resp = forward(m, [])
@@ -41,8 +41,8 @@ end
     err_resp = testResponse([0.1], [0.1])
 
     n_samples = 10_000
-    mcache = mcmc_cache(modelD, respD, n_samples, NUTS())
-    chains = stochastic_inverse(resp, err_resp, [], mcache; progress=false)
+    mcache = mcmc_cache(modelD, respD)
+    chains = stochastic_inverse(resp, err_resp, nothing, mcache, SliceSampler(), n_samples)
 
     m_list = get_model_list(chains, modelD)
 
