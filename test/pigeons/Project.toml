@@ -1,0 +1,12 @@
+[deps]
+ReTestItems = "817f1d60-ba6b-4fd5-9520-3cf149f6a823"
+SubsurfaceCore = "3a78539b-9dce-42c5-be8d-f3fa4153f7a3"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Pigeons = "0eb8d820-af6a-4919-95ae-11206f830c31"
+
+[sources.SubsurfaceCore]
+path = ".."
+
+[compat]
+Pigeons = "0.4.8"
+julia = "1.11"

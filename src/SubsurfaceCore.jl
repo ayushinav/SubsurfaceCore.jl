@@ -1,9 +1,10 @@
 module SubsurfaceCore
 using CairoMakie
 using LinearAlgebra
+using DynamicPPL
 using Distributions
+using MCMCChains
 using Statistics
-using Enzyme
 using UnPack
 import Base: show
 

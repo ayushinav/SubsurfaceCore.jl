@@ -20,15 +20,16 @@ concurrency:
 jobs:
   tests:
     runs-on: 'ubuntu-latest'
-    name: "Tests"
+    name: "${{ matrix.group }} (Julia ${{ matrix.version }})"
     strategy:
       fail-fast: false
       matrix:
-        version: ["1.11"]
+        version: ["1.10", "1.11"]
         group:
           - "transformation"
-          - "mcmc"
           - "utils"
+          - "turing"
+          - "pigeons"
     steps:
       - uses: actions/checkout@v6
 
@@ -37,10 +38,21 @@ jobs:
         with:
           version: "${{ matrix.version }}"
 
-      - name: "Run tests with Julia v${{ matrix.version }}"
+      - uses: julia-actions/cache@v2
+
+      - name: "Run core tests"
+        if: ${{ matrix.group != 'turing' && matrix.group != 'pigeons' }}
         uses: julia-actions/julia-runtest@v1
         env:
           GROUP: "${{ matrix.group }}"
+
+      - name: "Run Turing extension tests"
+        if: ${{ matrix.group == 'turing' }}
+        run: julia test/turing/runtests.jl
+
+      - name: "Run Pigeons extension tests"
+        if: ${{ matrix.group == 'pigeons' }}
+        run: julia test/pigeons/runtests.jl
 
       - uses: julia-actions/julia-processcoverage@v1
         with:
