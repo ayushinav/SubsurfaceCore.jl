@@ -46,19 +46,7 @@ function forward_helper(
         m::Type{T}, m0, vars, response_trans_utils, params) where {T <: AbstractModel}
     model = from_nt(m, m0)
     resp_nt = to_resp_nt(forward(model, vars, params))
-    for k in propertynames(resp_nt)
-        broadcast!(response_trans_utils[k].tf, resp_nt[k], resp_nt[k])
-    end
-    return resp_nt
-end
-
-function forward_helper2(m::Type{T}, m0, vars, model_trans_utils,
-        response_trans_utils, params) where {T <: AbstractModel}
-    for k in propertynames(m0)
-        broadcast!(model_trans_utils[k].tf, m0[k], m0[k])
-    end
-    model = from_nt(m, m0)
-    resp_nt = to_resp_nt(forward(model, vars, params))
+    @show response_trans_utils
     for k in propertynames(resp_nt)
         broadcast!(response_trans_utils[k].tf, resp_nt[k], resp_nt[k])
     end
