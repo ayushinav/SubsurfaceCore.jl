@@ -41,19 +41,10 @@ jobs:
       - uses: julia-actions/cache@v2
 
       - name: "Run tests"
-        if: ${{ matrix.group != 'turing' && matrix.group != 'pigeons' }}
         uses: julia-actions/julia-runtest@v1
         env:
           GROUP: "${{ matrix.group }}"
 
-      - name: "Run extension tests : Turing"
-        if: ${{ matrix.group == 'turing' }}
-        run: julia --project=test/turing test/turing/runtests.jl
-
-      - name: "Run extension tests : Pigeons"
-        if: ${{ matrix.group == 'pigeons' }}
-        run: julia --project=test/pigeons test/pigeons/runtests.jl
-
       - uses: julia-actions/julia-processcoverage@v1
         with:
-          directories: "src"
+          directories: "src,ext"
