@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ["1.10", "1.11"]
+        version: ["1.11"]
         group:
           - "transformation"
           - "utils"
@@ -40,17 +40,17 @@ jobs:
 
       - uses: julia-actions/cache@v2
 
-      - name: "Run core tests"
+      - name: "Run tests"
         if: ${{ matrix.group != 'turing' && matrix.group != 'pigeons' }}
         uses: julia-actions/julia-runtest@v1
         env:
           GROUP: "${{ matrix.group }}"
 
-      - name: "Run Turing extension tests"
+      - name: "Run extension tests : Turing"
         if: ${{ matrix.group == 'turing' }}
         run: julia test/turing/runtests.jl
 
-      - name: "Run Pigeons extension tests"
+      - name: "Run extension tests : Pigeons"
         if: ${{ matrix.group == 'pigeons' }}
         run: julia test/pigeons/runtests.jl
 

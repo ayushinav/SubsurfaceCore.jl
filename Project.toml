@@ -16,13 +16,18 @@ UnPack = "3a884ed6-31ef-47d7-9d2a-63182c4928ed"
 Pigeons = "0eb8d820-af6a-4919-95ae-11206f830c31"
 Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
 
+[extensions]
+SubsurfaceCoreTuringExt = "Turing"
+SubsurfaceCorePigeonsExt = "Pigeons"
+
 [compat]
 CairoMakie = "0.15.9"
 Distributions = "0.25.125"
-LinearAlgebra = "1.11.0"
-MCMCChains = "7.7.0"
+DynamicPPL = "0.31 - 0.41"
+LinearAlgebra = "1.11"
+MCMCChains = "6 - 7"
 Pigeons = "0.4.8"
-Statistics = "1.11.1"
+Statistics = "1.11"
 Turing = "0.41 - 0.43"
 UnPack = "1.0.2"
 julia = "1.11"
