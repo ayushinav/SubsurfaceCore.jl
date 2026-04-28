@@ -1,40 +1,32 @@
 """
     get_stochastic_inverse_model(
-        r_obs::response,
-        err_resp::response,
-        vars,
-        alg_cache::mcmc_cache;
-        model_trans_utils::NamedTuple = (m = no_tf, h = no_tf)
+        r_obs, err_resp, vars, alg_cache;
+        model_trans_utils, response_trans_utils, params
         )
-
-function to perform sampling
 
 ## Returns
 
-    `Chain` containing the samples. Note that all the variables will be named `m0`. If 
+returns a `DynamicPPL` model and a counter variable. The `DynamicPPL` model can be sampled using Turing or Pigeons, and the counter variable records the number of forward calls.
 
 ## Arguments
 
   - `r_obs`: `response` that needs to inverted for
   - `err_resp`: `response` variable containing the errors associated with observed response
-  - `vars`: variables that need to be passed into the `forward` function along with `model` to generate a `response`
-  - `alg_cache`: to tell the compiler what type of stochastic inversion method is to be used
+  - `vars`: variables that need to be passed into the `forward` function along with `model` to generate a `response`. Use `nothing` if no extra information is needed.
+  - `alg_cache`: contains the prior distributions and likelihood functions
 
 ### Optional Keyword Arguments
 
-  - `n_chains` : Number of chains to use
   - `model_trans_utils`: A named tuple containing `transform_utils` for the fields of model that need to be scaled/modified,
     defaults to no scaling.
   - response_trans_utils`: A named tuple containing to scale/ modify the response, defaults to no scaling.
-  - `params` : parameters needed for forward calculation
-  - `kwargs` : keyword arguments to be splatted into sampling function
+  - `params` : Settings needed for forward calculation, defaults to `default_params`
 """
 function get_stochastic_inverse_model(
-        r_obs::resp1, err_resp::resp2, vars, alg_cache::mcmc_cache; n_chains=1,
+        r_obs::resp1, err_resp::resp2, vars, alg_cache::mcmc_cache;
         model_trans_utils::NamedTuple=(;), # need to take care of this
         response_trans_utils::NamedTuple=(;),
         params=(;)) where {resp1 <: AbstractResponse, resp2 <: AbstractResponse}
-    model_fields = Symbol[]
 
     # segregate the constants and the Distribution parts of the alg_cache
 
@@ -77,7 +69,7 @@ function get_stochastic_inverse_model(
     """
     @info msg
 
-    counter_var = counter(1)
+    counter_var = counter(0)
 
     mcmc_model = mcmc_turing(var_nt, const_nt, #
         Val(m_type), vars, resp_nt, # ::NamedTuple
@@ -93,25 +85,24 @@ end
 
 """
     stochastic_inverse(
-        r_obs::response,
-        err_resp::response,
-        vars,
-        alg_cache::mcmc_cache;
-        model_trans_utils::NamedTuple = (m = no_tf, h = no_tf)
+        r_obs, err_resp, vars, alg_cache, sampler, n_samples;
+        n_chains, model_trans_utils, response_trans_utils, params, kwargs...
         )
 
-function to perform sampling
+function to perform stochastic sampling
 
 ## Returns
 
-    `Chain` containing the samples. Note that all the variables will be named `m0`. If 
+    `Chain` containing the samples. Note that all the variables will be named `m`.
 
 ## Arguments
 
   - `r_obs`: `response` that needs to inverted for
   - `err_resp`: `response` variable containing the errors associated with observed response
-  - `vars`: variables that need to be passed into the `forward` function along with `model` to generate a `response`
-  - `alg_cache`: to tell the compiler what type of stochastic inversion method is to be used
+  - `vars`: variables that need to be passed into the `forward` function along with `model` to generate a `response`. Use `nothing` if no extra information is needed.
+  - `alg_cache`: contains the prior distributions and likelihood functions
+  - `sampler`: contains the sampler for MCMC chains
+  - `n_samples`: Number of samples to obtain for MCMC, defaults to 10. For `Pigeons` samplers, this should be a power of 2, e.g. 1024, 2048, 4096, 8192, ...
 
 ### Optional Keyword Arguments
 
@@ -119,7 +110,7 @@ function to perform sampling
   - `model_trans_utils`: A named tuple containing `transform_utils` for the fields of model that need to be scaled/modified,
     defaults to no scaling.
   - response_trans_utils`: A named tuple containing to scale/ modify the response, defaults to no scaling.
-  - `params` : parameters needed for forward calculation
+  - `params` : Settings needed for forward calculation, defaults to `default_params`
   - `kwargs` : keyword arguments to be splatted into sampling function
 """
 function stochastic_inverse(val, r_obs::resp1, err_resp::resp2, vars, alg_cache::mcmc_cache,

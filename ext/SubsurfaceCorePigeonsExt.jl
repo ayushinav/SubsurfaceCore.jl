@@ -10,11 +10,9 @@ function stochastic_inverse(
         sampler, n_samples=10; n_chains=1, model_trans_utils::NamedTuple=(;), # need to take care of this
         response_trans_utils::NamedTuple=(;), params=(;),
         kwargs...) where {resp1 <: AbstractResponse, resp2 <: AbstractResponse}
-
-    # @assert typeof(sampler).name.module===Pigeons "
     mcmc_model,
-    counter_var = get_stochastic_inverse_model(r_obs, err_resp, vars, alg_cache; n_chains,
-        model_trans_utils, response_trans_utils, params)
+    counter_var = get_stochastic_inverse_model(
+        r_obs, err_resp, vars, alg_cache; model_trans_utils, response_trans_utils, params)
 
     n_rounds = Int(round(log2(n_samples)))
     pt = pigeons(; target=TuringLogPotential(mcmc_model), n_chains=n_chains, # Λ ~ 6

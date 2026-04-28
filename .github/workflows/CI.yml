@@ -49,19 +49,19 @@ jobs:
         if: ${{ matrix.group == 'turing' }}
         run: |
           julia --project=test/turing --color=yes -e 'using Pkg; Pkg.instantiate()'
-          julia --project=test/turing --color=yes test/turing/runtests.jl
+          julia --project=test/turing --color=yes --code-coverage=user test/turing/runtests.jl
 
       - name: "Run extension tests : Pigeons"
         if: ${{ matrix.group == 'pigeons' }}
         run: |
           julia --project=test/pigeons --color=yes -e 'using Pkg; Pkg.instantiate()'
-          julia --project=test/pigeons --color=yes test/pigeons/runtests.jl
+          julia --project=test/pigeons --color=yes --code-coverage=user test/pigeons/runtests.jl
 
       - uses: julia-actions/julia-processcoverage@v1
-        if: ${{ matrix.group != 'turing' && matrix.group != 'pigeons' }}
+        with:
+          directories: "src"
 
       - uses: codecov/codecov-action@v5
-        if: ${{ matrix.group != 'turing' && matrix.group != 'pigeons' }}
         with:
           files: lcov.info
           fail_ci_if_error: false
