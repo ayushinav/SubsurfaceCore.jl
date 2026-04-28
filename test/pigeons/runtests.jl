@@ -1,3 +1,6 @@
+using Pkg
+Pkg.instantiate()
+
 using ReTestItems, InteractiveUtils, Hwloc, SubsurfaceCore
 
 @info sprint(versioninfo)
