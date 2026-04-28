@@ -36,7 +36,7 @@ end
     respD = testResponseDistribution(normal_dist, normal_dist)
     err_resp = testResponse([0.1], [0.1])
 
-    n_samples = 10_000
+    n_samples = 8192
     mcache = mcmc_cache(modelD, respD)
     chains = stochastic_inverse(resp, err_resp, nothing, mcache, SliceSampler(), n_samples)
 

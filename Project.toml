@@ -23,7 +23,7 @@ SubsurfaceCorePigeonsExt = "Pigeons"
 [compat]
 CairoMakie = "0.15.9"
 Distributions = "0.25.125"
-DynamicPPL = "0.31 - 0.41"
+DynamicPPL = "0.31 - 0.39"
 LinearAlgebra = "1.11"
 MCMCChains = "6 - 7"
 Pigeons = "0.4.8"
