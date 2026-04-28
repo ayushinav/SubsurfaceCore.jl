@@ -17,8 +17,8 @@ include("../test_model.jl")
 
     n_samples = 10_000
     mcache = mcmc_cache(modelD, respD)
-    chains = stochastic_inverse(resp, err_resp, nothing, mcache, NUTS(), n_samples;
-        progress=false)
+    chains = stochastic_inverse(
+        resp, err_resp, nothing, mcache, NUTS(), n_samples; progress=false)
 
     m_list = get_model_list(chains, modelD)
 
@@ -39,8 +39,8 @@ end
 
     n_samples = 10_000
     mcache = mcmc_cache(modelD, respD)
-    chains = stochastic_inverse(resp, err_resp, nothing, mcache, NUTS(), n_samples;
-        progress=false)
+    chains = stochastic_inverse(
+        resp, err_resp, nothing, mcache, NUTS(), n_samples; progress=false)
 
     m_list = get_model_list(chains, modelD)
 
