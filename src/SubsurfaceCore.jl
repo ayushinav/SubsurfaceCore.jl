@@ -45,7 +45,7 @@ export plot_model, plot_model!
 
 # probabilistic
 export mcmc_cache
-export stochastic_inverse
+export get_stochastic_inverse_model, stochastic_inverse
 export normal_dist, uniform_dist
 export to_dist_nt
 

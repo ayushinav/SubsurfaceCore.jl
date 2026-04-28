@@ -86,7 +86,7 @@ function get_stochastic_inverse_model(
         likelihood, # ::responseDistribution
         params, model_trans_utils_,
         response_trans_utils_,  #
-        response_fields, model_fields, k)
+        response_fields, model_fields, counter_var)
 
     return mcmc_model, counter_var
 end
@@ -122,11 +122,16 @@ function to perform sampling
   - `params` : parameters needed for forward calculation
   - `kwargs` : keyword arguments to be splatted into sampling function
 """
+function stochastic_inverse(val, r_obs::resp1, err_resp::resp2, vars, alg_cache::mcmc_cache,
+        sampler, n_samples=10; n_chains=1, model_trans_utils::NamedTuple=(;),
+        response_trans_utils::NamedTuple=(;), params=(;),
+        kwargs...) where {resp1 <: AbstractResponse, resp2 <: AbstractResponse}
+    error("$(Base.moduleroot(parentmodule(typeof(sampler)))) not supported yet. Check out documentation on external samplers or open a new issue with SubsurfaceCore.jl.")
+end
+
 function stochastic_inverse(
-        r_obs::resp1, err_resp::resp2, vars, alg_cache::mcmc_cache, sampler,
-        n_samples=10, val=Val(parentmodule(typeof(sampler))); n_chains=1,
-        model_trans_utils::NamedTuple=(;), # need to take care of this
-        response_trans_utils::NamedTuple=(;),
-        params=(;), kwargs...) where {resp1 <: AbstractResponse, resp2 <: AbstractResponse}
-    error("$(typeof(sampler).name.module) not supported yet. Check out documentation on external samplers or open a new issue with SubsurfaceCore.jl.")
+        r_obs::resp1, err_resp::resp2, vars, alg_cache::mcmc_cache, sampler, n_samples=10;
+        kwargs...) where {resp1 <: AbstractResponse, resp2 <: AbstractResponse}
+    stochastic_inverse(Val(Base.moduleroot(parentmodule(typeof(sampler)))), r_obs,
+        err_resp, vars, alg_cache, sampler, n_samples; kwargs...)
 end

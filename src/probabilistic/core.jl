@@ -54,16 +54,15 @@ makes a `Turing.jl` model to perform MCMC sampling
         # ::Val{m_type}, vars, r_obs, err_resp, mDist::mdist, rDist::rdist,
         vars, r_obs, err_resp, mDist::mdist, rDist::rdist, params,
         model_trans_utils, response_trans_utils, response_fields,
-        model_fields, count) where {mdist, rdist, m_type}
+        model_fields, counter_var) where {mdist, rdist, m_type}
     m = merge(const_nt, var_nt)
 
     for k in model_fields
         m[k] ~ getfield(mDist, k)
-
         broadcast!(getfield(model_trans_utils, k).tf, m[k], m[k])
     end
 
-    count.c += 1
+    counter_var.c += 1
 
     total_nt = m
 
