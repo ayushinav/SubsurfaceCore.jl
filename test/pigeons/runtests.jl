@@ -1,8 +1,6 @@
-using ReTestItems, InteractiveUtils, Hwloc, JET, BenchmarkTools, Test
+using ReTestItems, InteractiveUtils, Hwloc, SubsurfaceCore
 
 @info sprint(versioninfo)
-
-const GROUP = lowercase(get(ENV, "GROUP", "all"))
 
 const RETESTITEMS_NWORKERS = parse(
     Int, get(ENV, "RETESTITEMS_NWORKERS", string(min(Hwloc.num_physical_cores(), 4))))
@@ -10,11 +8,6 @@ const RETESTITEMS_NWORKER_THREADS = parse(Int,
     get(ENV, "RETESTITEMS_NWORKER_THREADS",
         string(max(Hwloc.num_virtual_cores() ÷ RETESTITEMS_NWORKERS, 1))))
 
-using SubsurfaceCore
-
-@info "Running tests with $(RETESTITEMS_NWORKERS) workers and \
-       $(RETESTITEMS_NWORKER_THREADS) threads for group $(GROUP)"
-
-ReTestItems.runtests(SubsurfaceCore; tags=(GROUP == "all" ? nothing : [Symbol(GROUP)]),
+ReTestItems.runtests(joinpath(@__DIR__, "mcmc_test.jl"); tags=[:pigeons],
     nworkers=RETESTITEMS_NWORKERS,
     nworker_threads=RETESTITEMS_NWORKER_THREADS, testitem_timeout=3600)
