@@ -1,5 +1,5 @@
 @testitem "utils" tags=[:utils] begin
-    using Test, JET, Distributions
+    using Test, JET
 
     include("test_model.jl")
 
