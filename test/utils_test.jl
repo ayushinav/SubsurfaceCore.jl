@@ -23,7 +23,7 @@ end
     using Test
     using Distributions, JET
 
-    include("test/test_model.jl")
+    include("test_model.jl")
 
     m = testModel([2.0], [4.0])
     resp = forward(m, [])
@@ -40,4 +40,7 @@ end
     @test_opt first(get_stochastic_inverse_model(resp, err_resp, nothing, mcache))
 
     @test_call first(get_stochastic_inverse_model(resp, err_resp, nothing, mcache))
+
+    @test_throws "not supported yet. Check out documentation on external samplers or open a new issue with SubsurfaceCore.jl." stochastic_inverse(
+        resp, err_resp, nothing, mcache, transform_utils)
 end
