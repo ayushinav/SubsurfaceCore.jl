@@ -1,9 +1,11 @@
+mutable struct counter{T}
+    c::T
+end
+
 """
     mutable struct struct mcmc_cache{T1 <: AbstractGeophyModelDistribution, T2 <: AbstractGeophyResponseDistribution}
         apriori::T1
         likelihood::T2
-        n_samples::Int
-        sampler
     end
 
 placeholder to store
@@ -17,8 +19,6 @@ mutable struct mcmc_cache{
     T1 <: AbstractModelDistribution, T2 <: AbstractResponseDistribution}
     apriori::T1
     likelihood::T2
-    n_samples::Int
-    sampler
 end
 
 """
@@ -50,20 +50,24 @@ makes a `Turing.jl` model to perform MCMC sampling
   - `model_fields`: fields in `model` to draw inference on
   - `trans_utils`: to transform the model field variables to and from computational (inference) domain
 """
-@model function mcmc_turing(
-        m_type, const_data, vars, r_obs::NamedTuple, err_resp, mDist::mdist, rDist::rdist,
-        params; response_fields::Vector{Symbol}=[k for k in fieldnames(typeof(rDist))],
-        model_fields::Vector{Symbol}=[k for k in fieldnames(typeof(mDist))],
-        model_trans_utils::NamedTuple=(m=no_tf, h=no_tf),
-        response_trans_utils::NamedTuple=(ρₐ=no_tf, ϕ=no_tf)) where {mdist, rdist}
-    m0 = (; zip([keys(mDist)...], const_data)...)
+@model function mcmc_turing(var_nt, const_nt, ::Val{m_type},
+        # ::Val{m_type}, vars, r_obs, err_resp, mDist::mdist, rDist::rdist,
+        vars, r_obs, err_resp, mDist::mdist, rDist::rdist, params,
+        model_trans_utils, response_trans_utils, response_fields,
+        model_fields, counter_var) where {mdist, rdist, m_type}
+    m = merge(const_nt, var_nt)
 
     for k in model_fields
-        m0[k] ~ getfield(mDist, k)
-        broadcast!(getfield(model_trans_utils, k).tf, m0[k], m0[k])
+        m[k] ~ getfield(mDist, k)
+        broadcast!(getfield(model_trans_utils, k).tf, m[k], m[k])
     end
 
-    r_sample = forward_helper(m_type, m0, vars, response_trans_utils, params)
+    counter_var.c += 1
+
+    total_nt = m
+
+    # r_sample = forward_helper2(m_type, total_nt, vars, model_trans_utils, response_trans_utils, params)
+    r_sample = forward_helper(m_type, total_nt, vars, response_trans_utils, params)
 
     for k in response_fields
         r_obs[k] ~ getfield(rDist, k)(getfield(r_sample, k), getfield(err_resp, k) .^ 2)

@@ -24,6 +24,7 @@ parameterized on `vars`
       + `:plot` : data points are connected in a curve
       + `:errors` : plot errors along with the data points
         Defaults to `:plot`
+
   - `kwargs` : keyword arguments to be splatted into the `Makie` plotting routine
 
 ## Usage
@@ -37,12 +38,12 @@ function plot_response!(axs, vars, resp::response; errs=zero(resp), plt_type=:pl
     if plt_type === :plot
         for i in eachindex(axs)
             lines!(axs[i], vars, getproperty(resp, k[i]); kwargs...)
-            xscale, yscale = get_scales(response, Val{k[i]}())
+            xscale, yscale = get_scales(response, Val(k[i]))
 
             axs[i].xscale = xscale
             axs[i].yscale = yscale
 
-            xlabel, ylabel = get_labels(response, Val{k[i]}())
+            xlabel, ylabel = get_labels(response, Val(k[i]))
 
             axs[i].xlabel = xlabel
             axs[i].ylabel = ylabel
@@ -51,12 +52,12 @@ function plot_response!(axs, vars, resp::response; errs=zero(resp), plt_type=:pl
     elseif plt_type === :scatter
         for i in eachindex(axs)
             scatter!(axs[i], vars, getproperty(resp, k[i]); kwargs...)
-            xscale, yscale = get_scales(response, Val{k[i]}())
+            xscale, yscale = get_scales(response, Val(k[i]))
 
             axs[i].xscale = xscale
             axs[i].yscale = yscale
 
-            xlabel, ylabel = get_labels(response, Val{k[i]}())
+            xlabel, ylabel = get_labels(response, Val(k[i]))
 
             axs[i].xlabel = xlabel
             axs[i].ylabel = ylabel
@@ -65,12 +66,12 @@ function plot_response!(axs, vars, resp::response; errs=zero(resp), plt_type=:pl
         for i in eachindex(axs)
             errorbars!(axs[i], vars, getproperty(resp, k[i]),
                 getproperty(errs, k[i]) ./ 2; kwargs...)
-            xscale, yscale = get_scales(response, Val{k[i]}())
+            xscale, yscale = get_scales(response, Val(k[i]))
 
             axs[i].xscale = xscale
             axs[i].yscale = yscale
 
-            xlabel, ylabel = get_labels(response, Val{k[i]}())
+            xlabel, ylabel = get_labels(response, Val(k[i]))
 
             axs[i].xlabel = xlabel
             axs[i].ylabel = ylabel
@@ -100,6 +101,7 @@ parameterized on `vars`
       + `:plot` : data points are connected in a curve
       + `:errors` : plot errors along with the data points
         Defaults to `:plot`
+
   - `kwargs` : keyword arguments to be splatted into the `Makie` plotting routine
 
 ## Usage

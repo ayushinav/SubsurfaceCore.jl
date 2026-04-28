@@ -1,0 +1,9 @@
+[deps]
+InteractiveUtils = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+SubsurfaceCore = "3a78539b-9dce-42c5-be8d-f3fa4153f7a3"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
+
+[sources.SubsurfaceCore]
+path = "../.."
