@@ -1,11 +1,11 @@
 # SubsurfaceCore.jl
 
 [![SciML Code Style](https://img.shields.io/static/v1?label=code%20style&message=SciML&color=9558b2&labelColor=389826)](https://github.com/SciML/SciMLStyle)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ayushinav/SubsurfaceCore.jl/Tests.yml)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ayushinav/SubsurfaceCore.jl/CI.yml)
 [![codecov](https://codecov.io/gh/ayushinav/SubsurfaceCore.jl/graph/badge.svg?token=VQM6W3DUI4)](https://codecov.io/gh/ayushinav/SubsurfaceCore.jl)
 [![](https://img.shields.io/badge/%F0%9F%9B%A9%EF%B8%8F_tested_with-JET.jl-233f9a)](https://github.com/aviatesk/JET.jl)
 
-Provides functionality for Bayesian inference, for use in [Porosity.jl](https://github.com/ayushinav/Porosity.jl). While a quick rundown of the features and essentials is provided below, users are recommended to check out the downstream packages and its documentation for more comprehensive tutorials.
+Provides functionality for Bayesian inference, for use in [Porosity.jl](https://github.com/ayushinav/Porosity.jl) and [PrISM.jl](https://github.com/ayushinav/PrISM.jl). While a quick rundown of the features and essentials is provided below, users are recommended to check out the downstream packages and its documentation for more comprehensive tutorials.
 
 ## Interface
 
