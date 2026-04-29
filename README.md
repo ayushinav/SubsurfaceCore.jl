@@ -28,3 +28,5 @@ Provides functionality for Bayesian inference, for use in [Porosity.jl](https://
 ## Functionalities
 
   - `stochastic_inverse` : perform Bayesian inference. Outputs the posterior distribution in the form of `MCMCChains`, which can be converted into a list of corresponding models using `get_model_list`.
+
+  - `get_stochastic_inverse_models` : returns the object to sample MCMC chains
