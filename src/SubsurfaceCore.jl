@@ -1,5 +1,4 @@
 module SubsurfaceCore
-using CairoMakie
 using LinearAlgebra
 using DynamicPPL
 using Distributions
