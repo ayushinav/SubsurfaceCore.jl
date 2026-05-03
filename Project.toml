@@ -1,7 +1,7 @@
 name = "SubsurfaceCore"
 uuid = "3a78539b-9dce-42c5-be8d-f3fa4153f7a3"
-authors = ["Abhinav Pratap Singh"]
 version = "0.10.0"
+authors = ["Abhinav Pratap Singh"]
 
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
@@ -17,19 +17,19 @@ Pigeons = "0eb8d820-af6a-4919-95ae-11206f830c31"
 Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
 
 [extensions]
-SubsurfaceCoreTuringExt = "Turing"
-SubsurfaceCorePigeonsExt = "Pigeons"
 SubsurfaceCoreMakieExt = "Makie"
+SubsurfaceCorePigeonsExt = "Pigeons"
+SubsurfaceCoreTuringExt = "Turing"
 
 [compat]
-Makie = "0.24"
 Distributions = "0.25.125"
 DynamicPPL = "0.31 - 0.39"
 LinearAlgebra = "1.11"
 MCMCChains = "6 - 7"
+Makie = "0.24"
 Pigeons = "0.4.8"
 Statistics = "1.11"
-Turing = "0.35 - 0.43"
+Turing = "0.35 - 0.43, 0.45"
 UnPack = "1.0.2"
 julia = "1.11"
 
