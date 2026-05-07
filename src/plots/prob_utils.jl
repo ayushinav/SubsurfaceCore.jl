@@ -72,17 +72,7 @@ plots on `fig`, a heatmap of probability distributions sampled by a `chain` usin
 
 Also check relevant tutorial page!
 """
-function get_kde_image!(ax,
-        chain::C,
-        mDist::mdist;
-        K=gaussian_kernel,
-        half_space_depth=nothing,
-        kde_transformation_fn=identity,
-        return_kde_mat=false,
-        trans_utils=(m=no_tf, h=no_tf),
-        grid=(m=collect(-1:0.1:5), z=cumsum(mDist.h)),
-        kwargs...) where {
-        C <: Chains, mdist <: AbstractGeophyModelDistribution{<:Distribution, <:Any}}
+function get_kde_image!(ax, chain, mDist; kwargs...)
     error("Load a Makie backend first, e.g. `using CairoMakie`.")
 end
 
@@ -123,7 +113,7 @@ returns `fig`, a heatmap of probability distributions sampled by a `chain` using
 
 Also check relevant tutorial page!
 """
-function get_kde_image(args...; return_kde_mat=false, kwargs...)
+function get_kde_image(args...; kwargs...)
     error("Load a Makie backend first, e.g. `using CairoMakie`.")
 end
 
@@ -158,31 +148,7 @@ plots on `ax`, a bounds plot (using mean and std deviation) of probability distr
 
 Also check relevant tutorial page!
 """
-function get_mean_std_image!(ax,
-        chain::C,
-        mDist::mdist;
-        confidence_interval=0.95,
-        half_space_depth=nothing,
-        mean_kwargs=(;),
-        std_plus_kwargs=(;),
-        std_minus_kwargs=(;),
-        trans_utils=(m=no_tf, h=no_tf),
-        z_points=cumsum(mDist.h)) where {C <: Chains,
-        mdist <: AbstractGeophyModelDistribution{<:Distribution, <:AbstractVector}}
-    error("Load a Makie backend first, e.g. `using CairoMakie`.")
-end
-
-function get_mean_std_image!(ax,
-        chain::C,
-        mDist::mdist;
-        confidence_interval=0.95,
-        half_space_depth=nothing,
-        mean_kwargs=(;),
-        std_plus_kwargs=(;),
-        std_minus_kwargs=(;),
-        trans_utils=(;),
-        z_points=cumsum(mean(mDist.h))) where {C <: Chains,
-        mdist <: AbstractGeophyModelDistribution{<:Distribution, <:Distribution}}
+function get_mean_std_image!(ax, chain, mDist; kwargs...)
     error("Load a Makie backend first, e.g. `using CairoMakie`.")
 end
 

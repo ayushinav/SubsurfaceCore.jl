@@ -1,7 +1,7 @@
 name = "SubsurfaceCore"
 uuid = "3a78539b-9dce-42c5-be8d-f3fa4153f7a3"
 authors = ["Abhinav Pratap Singh"]
-version = "0.10.0"
+version = "0.10.1"
 
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"

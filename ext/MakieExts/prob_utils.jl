@@ -99,10 +99,10 @@ function get_kde_image!(ax,
     end
 end
 
-function get_kde_image(args...; return_kde_mat=false, kwargs...)
+function get_kde_image(chain::C, mDist; return_kde_mat=false, kwargs...) where {C <: Chains}
     fig = Figure()
     ax = Axis(fig[1, 1])
-    kde_img = get_kde_image!(ax, args...; return_kde_mat=return_kde_mat, kwargs...)
+    kde_img = get_kde_image!(ax, chain, mDist; return_kde_mat=return_kde_mat, kwargs...)
 
     if return_kde_mat
         return fig, kde_img
@@ -213,10 +213,10 @@ function get_mean_std_image!(ax,
     nothing
 end
 
-function get_mean_std_image(args...; kwargs...)
+function get_mean_std_image(chain::C, mDist; kwargs...) where {C <: Chains}
     fig = Figure()
     ax = Axis(fig[1, 1])
-    get_mean_std_image!(ax, args...; kwargs...)
+    get_mean_std_image!(ax, chain, mDist; kwargs...)
     fig
 end
 # COV_EXCL_STOP
