@@ -23,7 +23,7 @@ returns distribution of `data` using kernel density estimation
 function get_kde(data, xgrid; Κ=gaussian_kernel)
     σ = std(data)
     n = length(data)
-    h = 1.06 * σ * n^(-1/5)
+    h = 1.06 * σ * n^(-1 / 5)
     px = zeros(size(xgrid))
     for (i, x) in enumerate(xgrid)
         s = 0
