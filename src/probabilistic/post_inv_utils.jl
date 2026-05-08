@@ -45,8 +45,8 @@ function get_model_list(chains::chain,
 
         for k in fieldnames(model_type)
             if k in keys(trans_utils)
-                getfield(model_sample,
-                    k) .= broadcast(getproperty(trans_utils[k], :tf), getfield(model_sample, k))
+                getfield(model_sample, k) .= broadcast(
+                    getproperty(trans_utils[k], :tf), getfield(model_sample, k))
             end
         end
 

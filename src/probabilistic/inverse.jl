@@ -53,7 +53,8 @@ function get_stochastic_inverse_model(
 
     # response transform_utils
 
-    response_trans_utils_ = NamedTuple{keys(likelihood)}(ntuple(i -> no_tf, length(likelihood)))
+    response_trans_utils_ = NamedTuple{keys(likelihood)}(ntuple(
+        i -> no_tf, length(likelihood)))
     response_trans_utils_ = merge(response_trans_utils_, response_trans_utils)
 
     m_type = sample_type(alg_cache.apriori)
