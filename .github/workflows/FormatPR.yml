@@ -9,7 +9,7 @@ jobs:
       contents: write
       pull-requests: write 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Install JuliaFormatter and format
         run: |
           julia  -e 'using Pkg; Pkg.add(; name="JuliaFormatter", version="1")'
